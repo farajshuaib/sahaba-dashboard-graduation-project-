@@ -5,12 +5,10 @@ import { deleteToken, setToken, useApi } from "../../hooks/useApi";
 
 const api = useApi();
 
-export const connectToWallet = createAsyncThunk(
-  "users/connectToWallet",
-  async (wallet_address: string, thunkAPI) => {
-    const response = await api.post("/connect-wallet", {
-      wallet_address,
-    });
+export const login = createAsyncThunk(
+  "users/login",
+  async (credentials: { email: string; password: string }, thunkAPI) => {
+    const response = await api.post("/admin/login", credentials);
     if (response?.data?.token) {
       setToken(response.data.token);
     }
@@ -21,7 +19,7 @@ export const connectToWallet = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk("users/logout", async (_, thunkAPI) => {
-  const response = await api.post("/logout");
+  const response = await api.post("/admin/logout");
   deleteToken();
   thunkAPI.dispatch(clearGeneralState());
   return response.data;

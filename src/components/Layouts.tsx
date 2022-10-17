@@ -45,7 +45,7 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
     }
   };
 
-  const handleSignIn = async () => {
+  const handleConnectToWallet = async () => {
     try {
       const result = await switchNetwork();
       if (!result) return;
@@ -81,15 +81,15 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
             decoding="async"
             className="h-10 md:h-16"
           />
-          <h3 className="text-primary hidden md:block text-2xl uppercase font-bold leading-relaxed tracking-wide">
+          <h3 className="text-primary-800 hidden md:block text-2xl uppercase font-bold leading-relaxed tracking-wide">
             SAHABA
           </h3>
         </div>
       </div>
       <div className="flex items-center gap-5">
-        <div className="bg-primary/10 text-sm text-primary rounded-lg px-3 py-2 flex items-center gap-2">
+        <div className="bg-primary-100 text-sm text-primary-800 font-medium rounded-lg px-3 py-2 flex items-center gap-2">
           <i
-            onClick={handleSignIn}
+            onClick={handleConnectToWallet}
             className="bx bx-wallet text-lg cursor-pointer"
           ></i>
           {web3React.active ? (
@@ -107,7 +107,7 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
               </button>
             </div>
           ) : (
-            <span className="cursor-pointer" onClick={handleSignIn}>
+            <span className="cursor-pointer" onClick={handleConnectToWallet}>
               Connect to wallet
             </span>
           )}
@@ -212,7 +212,7 @@ const SideBar = forwardRef((props: SideBarProps, drawer: any) => {
                   className={({ isActive }) =>
                     `${
                       isActive
-                        ? "bg-primary/10 text-primary font-medium"
+                        ? "bg-primary-100 text-primary-800 font-medium"
                         : "text-gray-800"
                     } w-full flex items-center gap-2 hover:bg-primary/10 px-3 py-2 text-lg rounded-lg`
                   }

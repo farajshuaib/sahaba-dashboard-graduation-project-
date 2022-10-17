@@ -1,8 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind variants;
 
-
-:root {
-    font-family: 'Inter', sans-serif;
+html,
+body {
+  scroll-behavior: smooth;
 }
+
+

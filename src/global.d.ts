@@ -158,5 +158,24 @@ interface navLink {
   path: string;
   icon: React.ReactNode;
   isVisible: boolean;
-  elements?: navLink[]
+  elements?: navLink[];
 }
+
+//  ######  CustomLink  ######## //
+interface CustomLink {
+  label: string;
+  href: string;
+  targetBlank?: boolean;
+}
+
+type TwMainColor =
+  | "pink"
+  | "green"
+  | "yellow"
+  | "red"
+  | "indigo"
+  | "blue"
+  | "purple"
+  | "gray";
+
+//

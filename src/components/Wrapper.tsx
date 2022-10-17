@@ -8,6 +8,7 @@ import { persistor, store } from "../app/store";
 import { Web3Provider } from "@ethersproject/providers";
 
 //
+import "../styles/index.scss";
 import "../styles/index.css";
 import "react-toastify/dist/ReactToastify.css";
 

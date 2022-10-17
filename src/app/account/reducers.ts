@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { connectToWallet, logout } from "./actions";
+import { login, logout } from "./actions";
 
 export interface AccountState {
   userData?: any;
@@ -13,7 +13,7 @@ export const accountSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(connectToWallet.fulfilled, (state, action) => {
+    builder.addCase(login.fulfilled, (state, action) => {
       state.userData = action.payload.user;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
