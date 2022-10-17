@@ -6,15 +6,17 @@ export interface AccountState {
   userData?: any;
 }
 
-const initialState: AccountState = {};
+const initialState: AccountState = {
+  userData: null
+};
 
 export const accountSlice = createSlice({
   name: "account",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(login.fulfilled, (state, action) => {
-      state.userData = action.payload.user;
+    builder.addCase(login.fulfilled, (state, action:any) => {
+      state.userData = action?.payload?.user || null;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.userData = null;

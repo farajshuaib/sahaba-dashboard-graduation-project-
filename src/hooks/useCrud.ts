@@ -32,7 +32,7 @@ export function useCrud(url: string, options?: Options) {
 
   const deafultParams: any = {};
 
-  const fetch: any = async (params = deafultParams) => {
+  const fetch = async (params = deafultParams) => {
     setState((prevState) => ({
       ...prevState,
       data: [],

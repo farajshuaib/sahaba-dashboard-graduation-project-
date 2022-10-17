@@ -179,3 +179,8 @@ type TwMainColor =
   | "gray";
 
 //
+
+interface LoginCredentials {
+  email: string;
+  password: string;
+}

@@ -55,7 +55,7 @@ const Pagination: FC<PaginationProps> = ({ className = "", meta, setPage }) => {
 
   return (
     <nav
-      className={`nc-Pagination inline-flex space-x-1 text-base font-medium ${className}`}
+      className={`nc-Pagination my-5 inline-flex space-x-1 text-base font-medium ${className}`}
     >
       {pagination(meta.current, meta.last_page).map(renderItem)}
     </nav>

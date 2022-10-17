@@ -1,20 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { loginSchema } from "../services/validations";
 
 // import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useNavigation } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import banner from "../assets/SAHABA.png";
-import { useAppDispatch } from "../app/hooks";
-import { login } from "../app/account/actions";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { isLoggedIn, login } from "../app/account/actions";
 import ButtonPrimary from "../shared/Button/ButtonPrimary";
 import Input from "../shared/Input/Input";
+import { Alert } from "../shared/Alert/Alert";
+import { unwrapResult } from "@reduxjs/toolkit";
+import LoadingScreen from "../components/LoadingScreen";
 
 const Login: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState<string>("");
+  const userData = useAppSelector((state) => state.account.userData);
+
+  useEffect(() => {
+    if (userData) {
+      navigate("/");
+    } else {
+      dispatch(isLoggedIn())
+        .then(unwrapResult)
+        .then((res: any) => {
+          if (res.message == "success") {
+            navigate("/");
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, []);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div
@@ -26,16 +52,18 @@ const Login: React.FC = () => {
         validationSchema={loginSchema}
         onSubmit={async (values, { setSubmitting }) => {
           setError("");
+
           try {
-            await dispatch(login(values));
+            const resultAction = await dispatch(login(values));
+            const originalPromiseResult = unwrapResult(resultAction);
             setSubmitting(false);
             navigate("/");
-          } catch (err: any) {
+          } catch (error: any) {
+            console.log(error);
             setError(
-              err.response?.data?.message ||
+              error?.data?.message ||
                 "something went wrong please try again later"
             );
-
             setSubmitting(false);
           }
         }}
@@ -52,7 +80,6 @@ const Login: React.FC = () => {
         }) => (
           <div className="flex items-center md:h-3/4 w-11/12 md:w-3/4 bg-gray100 rounded-lg shadow-sm overflow-hidden">
             <div className="w-full md:w-1/2 p-5 sm:p-8 md:p-10 lg:p-16 ">
-              
               <Form>
                 <div className="my-5 w-full">
                   <label htmlFor="email" className="input-lable">
@@ -101,11 +128,12 @@ const Login: React.FC = () => {
                   />
                 </div>
 
-                {!!error && <p className="error-alert">{error}</p>}
+                {!!error && <Alert type="error">{error}</Alert>}
                 <ButtonPrimary
                   loading={isSubmitting}
                   disabled={isSubmitting}
                   onClick={() => handleSubmit()}
+                  className="block w-full"
                 >
                   Submit
                 </ButtonPrimary>

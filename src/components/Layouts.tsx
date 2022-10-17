@@ -8,17 +8,24 @@ import React, {
 } from "react";
 
 import logo from "../assets/logo.svg";
-import { Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
+import {
+  Outlet,
+  NavLink,
+  useNavigate,
+  useLocation,
+  useNavigation,
+} from "react-router-dom";
 import { toast } from "react-toastify";
 import { useClickAway } from "react-use";
 import { routerLinks } from "../config/navLinks";
 import { Popover, Transition } from "@headlessui/react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { logout } from "../app/account/actions";
+import { isLoggedIn, logout } from "../app/account/actions";
 import LoadingScreen from "./LoadingScreen";
 import { useWeb3React } from "@web3-react/core";
 import { switchNetwork } from "../utils/functions";
 import { connectors } from "../services/connectors";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 interface nav {
   setToggleSideBar: (val: boolean) => void;
@@ -208,15 +215,20 @@ const SideBar = forwardRef((props: SideBarProps, drawer: any) => {
               {!item.elements ? (
                 <NavLink
                   to={item.path}
+                  end
                   onClick={() => props.setToggleSideBar(false)}
                   className={({ isActive }) =>
                     `${
                       isActive
                         ? "bg-primary-100 text-primary-800 font-medium"
                         : "text-gray-800"
-                    } w-full flex items-center gap-2 hover:bg-primary/10 px-3 py-2 text-lg rounded-lg`
+                    } w-full relative overflow-hidden flex items-center gap-2 hover:bg-primary-100 my-2 px-3 py-2 text-lg rounded-lg`
                   }
                 >
+                  {location.pathname === item.path && (
+                    <span className="absolute left-0 h-full bg-primary-700 block w-1 rounded-lg"></span>
+                  )}
+
                   <span
                     className={`${
                       location.pathname === item.path
@@ -227,6 +239,7 @@ const SideBar = forwardRef((props: SideBarProps, drawer: any) => {
                     {" "}
                     {item.icon}
                   </span>
+
                   <span className=""> {item.name}</span>
                 </NavLink>
               ) : (
@@ -320,6 +333,9 @@ const Layout: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(true);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [error, setError] = useState<string>("");
+  const userData = useAppSelector((state) => state.account.userData);
   const drawer = useRef(null);
 
   const getData = async () => {
@@ -328,7 +344,26 @@ const Layout: React.FC = () => {
     } catch (e) {}
   };
 
+  const checkAuth = () => {
+    dispatch(isLoggedIn())
+      .then(unwrapResult)
+      .then((res: any) => {
+        if (res.message == "failed") {
+          navigate("/login");
+        }
+      })
+      .catch((error) => {
+        if (error.status == 401 || error.data.message == "Unauthenticated.") {
+          navigate("/login");
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
+    checkAuth();
     getData();
   }, []);
 
@@ -337,6 +372,10 @@ const Layout: React.FC = () => {
       setToggleSideBar(false);
     }
   });
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div

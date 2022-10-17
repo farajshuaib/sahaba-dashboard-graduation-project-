@@ -7,20 +7,38 @@ const api = useApi();
 
 export const login = createAsyncThunk(
   "users/login",
-  async (credentials: { email: string; password: string }, thunkAPI) => {
-    const response = await api.post("/admin/login", credentials);
-    if (response?.data?.token) {
-      setToken(response.data.token);
+  async (credentials: LoginCredentials, thunkAPI) => {
+    try {
+      const response = await api.post("/login", credentials);
+      if (response?.data?.token) {
+        setToken(response.data.token);
+      }
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response);
     }
-    thunkAPI.dispatch(getCollections());
-    thunkAPI.dispatch(getCategories());
-    return response.data;
+  }
+);
+
+export const isLoggedIn = createAsyncThunk(
+  "users/login",
+  async (_, thunkAPI) => {
+    try {
+      const response = await api.get("/me");
+      return thunkAPI.fulfillWithValue(response.data);
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response);
+    }
   }
 );
 
 export const logout = createAsyncThunk("users/logout", async (_, thunkAPI) => {
-  const response = await api.post("/admin/logout");
-  deleteToken();
-  thunkAPI.dispatch(clearGeneralState());
-  return response.data;
+  try {
+    const response = await api.post("/logout");
+    deleteToken();
+    thunkAPI.dispatch(clearGeneralState());
+    return response.data;
+  } catch (err: any) {
+    thunkAPI.rejectWithValue(err.response);
+  }
 });
