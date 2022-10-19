@@ -334,8 +334,6 @@ const Layout: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [error, setError] = useState<string>("");
-  const userData = useAppSelector((state) => state.account.userData);
   const drawer = useRef(null);
 
   const getData = async () => {

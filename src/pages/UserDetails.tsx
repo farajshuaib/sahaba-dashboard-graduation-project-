@@ -1,8 +1,11 @@
 import { Tab } from "@headlessui/react";
+import { useWeb3React } from "@web3-react/core";
 import EmptyData from "components/EmptyData";
 import Labeled from "components/Labeled";
 import LoadingScreen from "components/LoadingScreen";
 import ServerError from "components/ServerError";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "constant";
+import { Contract } from "ethers";
 import { Table, Tabs } from "flowbite-react";
 import { useApi } from "hooks/useApi";
 import { useCrud } from "hooks/useCrud";
@@ -15,6 +18,7 @@ import Badge from "shared/Badge/Badge";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
 import Heading from "shared/Heading/Heading";
+import logo_light from "../assets/logo_light.svg";
 import Pagination from "shared/Pagination/Pagination";
 
 const RenderTabUserTransactions = (userData: UserData) => {
@@ -220,6 +224,8 @@ const UserDetails: React.FC = () => {
   const { fetchById, loading, item, errors } = useCrud(`/users`);
   const [changingStatusLoading, setChangingStatusLoading] = useState(false);
   const navigate = useNavigate();
+  const [accountTotalBalance, setAccountTotalBalance] = useState(0);
+  const { library, active, account } = useWeb3React();
 
   useEffect(() => {
     if (!params.id) {
@@ -229,6 +235,29 @@ const UserDetails: React.FC = () => {
     }
     fetchById(params.id);
   }, []);
+
+  const getAccountTotalBalance = async () => {
+    try {
+      if (!active || !item) return;
+      const contract = new Contract(
+        CONTRACT_ADDRESS,
+        CONTRACT_ABI,
+        library?.getSigner()
+      );
+
+      const balance = await contract.getTotalNumberOfTokensOwnedByAnAddress(
+        item.wallet_address
+      );
+      console.log("balance",balance)
+      setAccountTotalBalance(balance);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAccountTotalBalance();
+  }, [active, item, account]);
 
   if (loading) {
     return <LoadingScreen />;
@@ -282,7 +311,7 @@ const UserDetails: React.FC = () => {
       <div className="my-2 flex items-center flex-wrap gap-3">
         <Badge
           name={`Account: ${userData?.status}`}
-          color={userData?.status == "enabled" ? "green" : "yellow"}
+          color={userData?.status == "enabled" ? "green" : "red"}
         />
         <Badge
           name={`Email: ${
@@ -294,6 +323,16 @@ const UserDetails: React.FC = () => {
           name={`KYC: ${userData?.is_verified ? "verified" : "not verified"}`}
           color={userData?.is_verified ? "green" : "yellow"}
         />
+      </div>
+    </div>
+  );
+
+  const _renderAccountBalance = () => (
+    <div className="bg-primary-700 rounded-lg p-5 text-white flex items-center gap-4">
+      <img src={logo_light} alt="sahaba" className="h-24" />
+      <div className="">
+        <h5 className="uppercase text-xl font-medium">total balance</h5>
+        <span>{accountTotalBalance} NFTs</span>
       </div>
     </div>
   );
@@ -353,6 +392,7 @@ const UserDetails: React.FC = () => {
       </section>
       <section className="col-span-4 flex flex-col gap-5">
         {_renderUserCard(item)}
+        {_renderAccountBalance()}
       </section>
     </div>
   );

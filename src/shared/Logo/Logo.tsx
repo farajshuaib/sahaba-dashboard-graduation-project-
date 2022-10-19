@@ -1,19 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logoImg from "assets/images/logo_dark.svg";
-import logoLightImg from "assets/images/logo_light.svg";
+import logoImg from "../../assets/logo.svg";
 
 export interface LogoProps {
   img?: string;
-  imgLight?: string;
   className?: string;
 }
 
-const Logo: React.FC<LogoProps> = ({
-  img = logoImg,
-  imgLight = logoLightImg,
-  className = "",
-}) => {
+const Logo: React.FC<LogoProps> = ({ img = logoImg, className = "" }) => {
   return (
     <Link
       to="/"
@@ -23,19 +17,12 @@ const Logo: React.FC<LogoProps> = ({
       {/* PLEASE UN COMMENT BELLOW CODE AND USE IT */}
       {img ? (
         <img
-          className={`block max-h-16 ${imgLight ? "dark:hidden" : ""}`}
+          className={`block max-h-16`}
           src={img}
           alt="Logo"
         />
       ) : (
         "Logo Here"
-      )}
-      {imgLight && (
-        <img
-          className="hidden max-h-16 dark:block"
-          src={imgLight}
-          alt="Logo-Light"
-        />
       )}
     </Link>
   );
