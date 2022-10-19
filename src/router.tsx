@@ -13,6 +13,7 @@ import { store } from "./app/store";
 import { isLoggedIn } from "./app/account/actions";
 import { unwrapResult } from "@reduxjs/toolkit";
 import ServerError from "./components/ServerError";
+import UserDetails from "pages/UserDetails";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "/users",
         element: <Users />,
+      },
+      {
+        path: "/user/:id",
+        element: <UserDetails />,
       },
       {
         path: "/KYC-applications",
@@ -54,7 +59,6 @@ const router = createBrowserRouter([
     path: "/login",
     element: <Login />,
     errorElement: <ServerError />,
-  
   },
 ]);
 

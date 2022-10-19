@@ -353,7 +353,7 @@ const Layout: React.FC = () => {
         }
       })
       .catch((error) => {
-        if (error.status == 401 || error.data.message == "Unauthenticated.") {
+        if (error.status != 200) {
           navigate("/login");
         }
       })

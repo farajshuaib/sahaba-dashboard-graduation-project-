@@ -1,6 +1,7 @@
 import { Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import ButtonSecondary from "shared/Button/ButtonSecondary";
 import EmptyData from "../components/EmptyData";
 import LoadingScreen from "../components/LoadingScreen";
 import ServerError from "../components/ServerError";
@@ -11,6 +12,7 @@ import Pagination from "../shared/Pagination/Pagination";
 const Users: React.FC = () => {
   const { fetch, loading, data, meta, errors } = useCrud("/users");
   const [page, setPage] = useState<number>(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch({ page });
@@ -34,24 +36,56 @@ const Users: React.FC = () => {
 
       <Table>
         <Table.Head>
-          {Object.keys(data[0]).map((key, index) => (
-            <Table.HeadCell key={index}>{key}</Table.HeadCell>
+          {[
+            "id",
+            "first name",
+            "last name",
+            "username",
+            "email",
+            "wallet address",
+            "bio",
+            "is verified",
+            "created nfts count",
+            "owned nfts count",
+            "is subscribed",
+            "actions",
+          ].map((item, index) => (
+            <Table.HeadCell key={index} className="whitespace-nowrap">
+              {item}
+            </Table.HeadCell>
           ))}
         </Table.Head>
         <Table.Body className="divide-y">
-          {data.map((user, index) => (
+          {data.map((user: UserData, index) => (
             <Table.Row
               key={index}
               className="bg-white dark:border-gray-700 dark:bg-gray-800"
             >
-              {Object.values(user).map((val, innerIndex) => (
+              {[
+                user.id,
+                user.first_name,
+                user.last_name,
+                user.username,
+                user.email,
+                user.wallet_address,
+                user.bio,
+                user.is_verified,
+                user.created_nfts_count,
+                user.owned_nfts_count,
+                user.is_subscribed,
+              ].map((item, index) => (
                 <Table.Cell
-                  key={innerIndex}
+                  key={index}
                   className="whitespace-nowrap font-medium text-gray-800 dark:text-white"
                 >
-                  {`${val || "unknown"}`}
+                  <span>{`${item}`}</span>
                 </Table.Cell>
               ))}
+              <Table.Cell className="whitespace-nowrap font-medium text-gray-800 dark:text-white">
+                <ButtonSecondary onClick={() => navigate(`/user/${user.id}`)}>
+                  show details
+                </ButtonSecondary>
+              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
