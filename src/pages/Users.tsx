@@ -63,16 +63,16 @@ const Users: React.FC = () => {
             >
               {[
                 user.id,
-                user.first_name,
-                user.last_name,
-                user.username,
-                user.email,
-                user.wallet_address,
-                user.bio,
-                user.is_verified,
-                user.created_nfts_count,
-                user.owned_nfts_count,
-                user.is_subscribed,
+                user.first_name || "-",
+                user.last_name || "-",
+                user.username || "-",
+                user.email || "-",
+                user.wallet_address || "-",
+                user.bio || "-",
+                user.is_verified ? "yes" : "no",
+                user.created_nfts_count || "-",
+                user.owned_nfts_count || "-",
+                user.is_subscribed ? "yes" : "no",
               ].map((item, index) => (
                 <Table.Cell
                   key={index}

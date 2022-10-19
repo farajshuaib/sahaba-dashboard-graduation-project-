@@ -248,8 +248,7 @@ const UserDetails: React.FC = () => {
       const balance = await contract.getTotalNumberOfTokensOwnedByAnAddress(
         item.wallet_address
       );
-      console.log("balance",balance)
-      setAccountTotalBalance(balance);
+      setAccountTotalBalance(+balance.toString());
     } catch (error: any) {
       console.log(error);
     }
