@@ -2,6 +2,7 @@ import { Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
+import { getUserSlug } from "utils/functions";
 import EmptyData from "../components/EmptyData";
 import LoadingScreen from "../components/LoadingScreen";
 import ServerError from "../components/ServerError";
@@ -69,7 +70,7 @@ const Collections: React.FC = () => {
                 collection.id,
                 collection.name,
                 collection.category.name,
-                collection.created_by.username,
+                getUserSlug(collection.created_by),
                 collection.is_sensitive_content ? "yes" : "no",
                 collection.nfts_count,
                 collection.volume,
@@ -105,11 +106,7 @@ const Collections: React.FC = () => {
                   className="font-medium text-gray-800 whitespace-nowrap dark:text-white"
                 >
                   {item ? (
-                    <a
-                      href={item}
-                      target="_blank"
-                      className="link"
-                    >
+                    <a href={item} target="_blank" className="link">
                       <span>preview</span>
                     </a>
                   ) : (

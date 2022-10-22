@@ -2,6 +2,7 @@ import { Table } from "flowbite-react";
 import moment from "moment";
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { getUserSlug } from "utils/functions";
 
 interface props {
   transactions: Transactions[];
@@ -35,18 +36,12 @@ const TransactionsTable: React.FC<props> = ({ transactions }) => {
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
                 <NavLink to={`/user/${transaction.from.id}`} className="link">
-                  <span>
-                    {transaction.from.username ||
-                      transaction.from.wallet_address.slice(0, 6) + "..."}
-                  </span>
+                  <span>{getUserSlug(transaction.from)}</span>
                 </NavLink>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
                 <NavLink to={`/user/${transaction.to.id}`} className="link">
-                  <span>
-                    {transaction.to.username ||
-                      transaction.to.wallet_address.slice(0, 6) + "..."}
-                  </span>
+                  <span>{getUserSlug(transaction.to)}</span>
                 </NavLink>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">

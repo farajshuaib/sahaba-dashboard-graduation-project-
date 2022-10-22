@@ -2,6 +2,7 @@ import { Table } from "flowbite-react";
 import moment from "moment";
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { getUserSlug } from "utils/functions";
 import EmptyData from "./EmptyData";
 
 interface Props {
@@ -19,11 +20,13 @@ const ReportsTable: React.FC<Props> = ({ reports }) => {
     <div>
       <Table>
         <Table.Head>
-          {["id","reportable", "type", "message", "date", "reporter"].map((item, index) => (
-            <Table.HeadCell key={index} className="whitespace-nowrap">
-              {item}
-            </Table.HeadCell>
-          ))}
+          {["id", "reportable", "type", "message", "date", "reporter"].map(
+            (item, index) => (
+              <Table.HeadCell key={index} className="whitespace-nowrap">
+                {item}
+              </Table.HeadCell>
+            )
+          )}
         </Table.Head>
         <Table.Body className="divide-y">
           {reports.map((report: Reports, index: number) => (
@@ -47,7 +50,7 @@ const ReportsTable: React.FC<Props> = ({ reports }) => {
               ))}
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
                 <NavLink className="link" to={`/user/${report.reported_by.id}`}>
-                  {report.reported_by.username || report.reported_by.wallet_address.slice(0, 5) + "..." + report.reported_by.wallet_address.slice(-5)}
+                  {getUserSlug(report.reported_by)}
                 </NavLink>
               </Table.Cell>
             </Table.Row>

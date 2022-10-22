@@ -2,6 +2,7 @@ import { Table } from "flowbite-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
+import { getUserSlug } from "utils/functions";
 
 interface Props {
   children?: React.ReactNode;
@@ -42,7 +43,7 @@ const CollectionCollaborators: React.FC<Props> = ({ collaborators }) => {
                 user.id,
                 user.first_name || "-",
                 user.last_name || "-",
-                user.username || "-",
+                getUserSlug(user) || "-",
                 user.email || "-",
                 user.wallet_address || "-",
                 user.is_verified ? "yes" : "no",

@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import Heading from "shared/Heading/Heading";
 import NcImage from "shared/NcImage/NcImage";
 import Pagination from "shared/Pagination/Pagination";
+import { getUserSlug } from "utils/functions";
 
 const _renderTabNftDetails = (nft: Nft) => (
   <section className="my-8">
@@ -29,13 +30,13 @@ const _renderTabNftDetails = (nft: Nft) => (
       />
       <Labeled
         title="creator"
-        previewTitle={nft?.creator.username || nft?.creator.wallet_address}
+        previewTitle={getUserSlug(nft?.creator)}
         preview
         value={`/user/${nft?.creator.id}`}
       />
       <Labeled
         title="owner"
-        previewTitle={nft?.owner.username || nft?.owner.wallet_address}
+        previewTitle={getUserSlug(nft?.owner)}
         preview
         value={`/user/${nft?.owner.id}`}
       />

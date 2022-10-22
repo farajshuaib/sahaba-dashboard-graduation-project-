@@ -2,6 +2,7 @@ import { Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
+import { getUserSlug } from "utils/functions";
 import EmptyData from "../components/EmptyData";
 import LoadingScreen from "../components/LoadingScreen";
 import ServerError from "../components/ServerError";
@@ -64,7 +65,7 @@ const Users: React.FC = () => {
                 user.id,
                 user.first_name || "-",
                 user.last_name || "-",
-                user.username || "-",
+                getUserSlug(user) || "-",
                 user.email || "-",
                 user.wallet_address || "-",
                 user.is_verified ? "yes" : "no",
@@ -74,12 +75,12 @@ const Users: React.FC = () => {
               ].map((item, index) => (
                 <Table.Cell
                   key={index}
-                  className="whitespace-nowrap font-medium text-gray-800 dark:text-white"
+                  className="font-medium text-gray-800 whitespace-nowrap dark:text-white"
                 >
                   <span>{`${item}`}</span>
                 </Table.Cell>
               ))}
-              <Table.Cell className="whitespace-nowrap font-medium text-gray-800 dark:text-white">
+              <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
                 <ButtonSecondary onClick={() => navigate(`/user/${user.id}`)}>
                   show details
                 </ButtonSecondary>

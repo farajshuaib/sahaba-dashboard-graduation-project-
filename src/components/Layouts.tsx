@@ -75,10 +75,10 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
       <div className="flex items-center gap-2">
         <i
           onClick={() => setToggleSideBar(true)}
-          className=" text-3xl bx bx-menu md:hidden cursor-pointer"
+          className="text-3xl cursor-pointer  bx bx-menu md:hidden"
         ></i>
         <div
-          className="cursor-pointer flex items-center gap-2"
+          className="flex items-center gap-2 cursor-pointer"
           onClick={() => navigate("/")}
         >
           <img
@@ -88,16 +88,16 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
             decoding="async"
             className="h-10 md:h-16"
           />
-          <h3 className="text-primary-800 hidden md:block text-2xl uppercase font-bold leading-relaxed tracking-wide">
+          <h3 className="hidden text-2xl font-bold leading-relaxed tracking-wide uppercase text-primary-800 md:block">
             SAHABA
           </h3>
         </div>
       </div>
       <div className="flex items-center gap-5">
-        <div className="bg-primary-100 text-sm text-primary-800 font-medium rounded-lg px-3 py-2 flex items-center gap-2">
+        <div className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg bg-primary-100 text-primary-800">
           <i
             onClick={handleConnectToWallet}
-            className="bx bx-wallet text-lg cursor-pointer"
+            className="text-lg cursor-pointer bx bx-wallet"
           ></i>
           {web3React.active ? (
             <div className="flex items-center gap-2">
@@ -108,7 +108,7 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
               </span>
               <button
                 onClick={() => web3React.deactivate()}
-                className="px-2 py-1 rounded-lg text-xs text-red900 bg-red900/10"
+                className="px-2 py-1 text-xs rounded-lg text-red900 bg-red900/10"
               >
                 Disconnect
               </button>
@@ -144,7 +144,7 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
                     navigate("/my-profile");
                   }}
                   aria-hidden="true"
-                  className="flex items-center justify-start w-full px-2 py-3  border-b border-gray-200 cursor-pointer select-none text-gray800 hover:bg-gray-50"
+                  className="flex items-center justify-start w-full px-2 py-3 border-b border-gray-200 cursor-pointer select-none text-gray800 hover:bg-gray-50"
                 >
                   <i className="mx-2 bx bx-user"></i>
                   <span>My Account</span>
@@ -152,7 +152,7 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
                 <li
                   onClick={Logout}
                   aria-hidden="true"
-                  className="flex items-center justify-between w-full px-2 py-3  cursor-pointer select-none text-gray800 hover:bg-gray-50"
+                  className="flex items-center justify-between w-full px-2 py-3 cursor-pointer select-none text-gray800 hover:bg-gray-50"
                 >
                   <div className="flex items-center">
                     <i className="mx-2 bx bx-log-in"></i>
@@ -207,7 +207,7 @@ const SideBar = forwardRef((props: SideBarProps, drawer: any) => {
         ></i>
       </div>
 
-      <ul className="my-5 p-4 ">
+      <ul className="p-4 my-5 ">
         {routerLinks
           .filter((link: navLink) => link.isVisible)
           .map((item: navLink, index: number) => (
@@ -226,7 +226,7 @@ const SideBar = forwardRef((props: SideBarProps, drawer: any) => {
                   }
                 >
                   {location.pathname === item.path && (
-                    <span className="absolute left-0 h-full bg-primary-700 block w-1 rounded-lg"></span>
+                    <span className="absolute left-0 block w-1 h-full rounded-lg bg-primary-700"></span>
                   )}
 
                   <span

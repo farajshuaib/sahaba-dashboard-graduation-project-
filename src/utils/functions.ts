@@ -87,3 +87,12 @@ export function copyToClipboard(value: string) {
   navigator.clipboard.writeText(value);
   toast.success("address copied to clipboard");
 }
+
+export const getUserSlug = (userData: UserData) => {
+  return (
+    userData?.username ||
+    userData.wallet_address.slice(0, 5) +
+      "..." +
+      userData.wallet_address.slice(-5)
+  );
+};

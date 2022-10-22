@@ -12,6 +12,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Heading from "shared/Heading/Heading";
 import Pagination from "shared/Pagination/Pagination";
+import { getUserSlug } from "utils/functions";
 
 const _renderTabCollectionDetails = (collection: Collection) => (
   <section className="grid grid-cols-2 gap-5 my-8 md:grid-cols-2 ">
@@ -25,7 +26,7 @@ const _renderTabCollectionDetails = (collection: Collection) => (
     <Labeled title="min price" value={`${collection?.min_price}`} />
     <Labeled title="volume" value={`${collection?.volume}`} />
     <Labeled title="number of NFTs" value={`${collection?.nfts_count}`} />
-    <Labeled title="created by" value={collection?.created_by.username} />
+    <Labeled title="created by" value={getUserSlug(collection?.created_by)} />
     <Labeled preview title="logo image" value={collection?.logo_image} />
     <Labeled
       preview

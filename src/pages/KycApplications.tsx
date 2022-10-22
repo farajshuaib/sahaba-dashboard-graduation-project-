@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Badge from "shared/Badge/Badge";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
+import { getUserSlug } from "utils/functions";
 import EmptyData from "../components/EmptyData";
 import LoadingScreen from "../components/LoadingScreen";
 import ServerError from "../components/ServerError";
@@ -32,9 +33,7 @@ const KycApplications: React.FC = () => {
     return <EmptyData />;
   }
 
-  const toggleUserKyc = (user: UserData) => {
-   
-  };
+  const toggleUserKyc = (user: UserData) => {};
 
   return (
     <div>
@@ -70,7 +69,7 @@ const KycApplications: React.FC = () => {
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
                 <NavLink to={`/user/${user.id}`} className="link">
-                  {user.username || user.wallet_address?.slice(0, 6) + "..."}
+                  {getUserSlug(user)}
                 </NavLink>
               </Table.Cell>
               {[

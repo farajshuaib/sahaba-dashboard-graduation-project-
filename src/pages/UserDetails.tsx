@@ -23,6 +23,7 @@ import Pagination from "shared/Pagination/Pagination";
 import ReportsTable from "components/ReportsTable";
 import NftsTable from "components/NftsTable";
 import TransactionsTable from "components/TransactionsTable";
+import { getUserSlug } from "utils/functions";
 
 const RenderTabUserTransactions = (userData: UserData) => {
   const { fetch, loading, data, meta, errors } = useCrud(`/transactions`);
@@ -359,7 +360,7 @@ const UserDetails: React.FC = () => {
       <div className="flex items-center gap-3">
         <Avatar sizeClass="w-24 h-24" imgUrl={userData?.profile_photo} />
         <div className="flex flex-col gap-1">
-          <h4 className="text-xl">{userData?.username || "anon"}</h4>
+          <h4 className="text-xl">{getUserSlug(userData)}</h4>
           <h6 className="text-sm text-gray-600">{userData?.email || "-"}</h6>
         </div>
       </div>

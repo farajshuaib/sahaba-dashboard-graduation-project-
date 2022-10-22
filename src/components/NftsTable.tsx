@@ -3,6 +3,7 @@ import moment from "moment";
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
+import { getUserSlug } from "utils/functions";
 
 interface Props {
   nfts: Nft[];
@@ -66,34 +67,18 @@ const NftsTable: React.FC<Props> = ({ nfts }) => {
                 </NavLink>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
-                <NavLink
-                  to={`/user/${nft.creator.id}`}
-                  className="link"
-                >
-                  <span>
-                    {nft.creator.username ||
-                      nft.creator.wallet_address.slice(0, 6) + "..."}
-                  </span>
+                <NavLink to={`/user/${nft.creator.id}`} className="link">
+                  <span>{getUserSlug(nft.creator)}</span>
                 </NavLink>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
-                <NavLink
-                  to={`/user/${nft.owner.id}`}
-                  className="link"
-                >
-                  <span>
-                    {nft.owner.username ||
-                      nft.creator.wallet_address.slice(0, 6) + "..."}
-                  </span>
+                <NavLink to={`/user/${nft.owner.id}`} className="link">
+                  <span>{getUserSlug(nft.owner)}</span>
                 </NavLink>
               </Table.Cell>
 
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
-                <a
-                  href={nft.file_path}
-                  target="_blank"
-                  className="link"
-                >
+                <a href={nft.file_path} target="_blank" className="link">
                   <i className="bx bx-image-alt"></i>
                   <span>preview</span>
                 </a>
