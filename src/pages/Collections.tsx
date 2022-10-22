@@ -1,6 +1,7 @@
 import { Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import ButtonSecondary from "shared/Button/ButtonSecondary";
 import EmptyData from "../components/EmptyData";
 import LoadingScreen from "../components/LoadingScreen";
 import ServerError from "../components/ServerError";
@@ -11,6 +12,7 @@ import Pagination from "../shared/Pagination/Pagination";
 const Collections: React.FC = () => {
   const { fetch, loading, data, meta, errors } = useCrud("/collections");
   const [page, setPage] = useState<number>(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch({ page });
@@ -34,24 +36,94 @@ const Collections: React.FC = () => {
 
       <Table>
         <Table.Head>
-          {Object.keys(data[0]).map((key, index) => (
-            <Table.HeadCell key={index}>{key}</Table.HeadCell>
+          {[
+            "id",
+            "name",
+            "CATEGORY",
+            "CREATED BY",
+            "IS SENSITIVE CONTENT",
+            "number of NFTS",
+            "VOLUME",
+            "MIN PRICE",
+            "MAX PRICE",
+            "logo image",
+            "website",
+            "twitter",
+            "facebook",
+            "telegram",
+            "instagram",
+            "action",
+          ].map((key, index) => (
+            <Table.HeadCell className="whitespace-nowrap" key={index}>
+              {key}
+            </Table.HeadCell>
           ))}
         </Table.Head>
         <Table.Body className="divide-y">
-          {data.map((user, index) => (
+          {data.map((collection: Collection, index) => (
             <Table.Row
               key={index}
               className="bg-white dark:border-gray-700 dark:bg-gray-800"
             >
-              {Object.values(user).map((val, innerIndex) => (
+              {[
+                collection.id,
+                collection.name,
+                collection.category.name,
+                collection.created_by.username,
+                collection.is_sensitive_content ? "yes" : "no",
+                collection.nfts_count,
+                collection.volume,
+                collection.min_price,
+                collection.max_price,
+              ].map((val, innerIndex) => (
                 <Table.Cell
                   key={innerIndex}
-                  className="whitespace-nowrap font-medium text-gray-800 dark:text-white"
+                  className="font-medium text-gray-800 whitespace-nowrap dark:text-white"
                 >
-                  {`${val != null ? val : "unknown"}`}
+                  {val || "-"}
                 </Table.Cell>
               ))}
+              <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
+                <a
+                  href={collection.logo_image}
+                  target="_blank"
+                  className="link"
+                >
+                  <i className="bx bx-image-alt"></i>
+                  <span>preview</span>
+                </a>
+              </Table.Cell>
+              {[
+                collection?.social_links?.website_url,
+                collection?.social_links?.twitter_url,
+                collection?.social_links?.facebook_url,
+                collection?.social_links?.telegram_url,
+                collection?.social_links?.instagram_url,
+              ].map((item, index) => (
+                <Table.Cell
+                  key={index}
+                  className="font-medium text-gray-800 whitespace-nowrap dark:text-white"
+                >
+                  {item ? (
+                    <a
+                      href={item}
+                      target="_blank"
+                      className="link"
+                    >
+                      <span>preview</span>
+                    </a>
+                  ) : (
+                    "-"
+                  )}
+                </Table.Cell>
+              ))}
+              <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
+                <ButtonSecondary
+                  onClick={() => navigate(`/collection/${collection.id}`)}
+                >
+                  show details
+                </ButtonSecondary>
+              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>

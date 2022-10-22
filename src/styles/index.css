@@ -1,5 +1,6 @@
 @tailwind base;
 @tailwind components;
+
 @tailwind utilities;
 @tailwind variants;
 
@@ -8,4 +9,6 @@ body {
   scroll-behavior: smooth;
 }
 
-
+.link {
+  @apply flex items-center gap-1 text-blue-500 hover:underline;
+}

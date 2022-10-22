@@ -100,6 +100,7 @@ interface Transactions {
   created_at: Date;
   nft: Nft;
   type: "mint" | "set_for_sale" | "sale" | "update_price";
+  created_at: Date;
 }
 
 interface SocialLinks {
@@ -114,7 +115,7 @@ interface SocialLinks {
 interface Nft {
   id: number;
   title: string;
-  creator_address: string;
+  watch_time: number;
   description: string;
   file_path: string;
   collection: Collection;
@@ -127,12 +128,13 @@ interface Nft {
   is_liked?: boolean;
   transactions: Transactions[];
   sale_end_at: Date;
+  created_at: Date;
+  status: "published" | "hidden";
 }
 
 interface Collection {
   id: number;
   banner_image: string;
-  collection_token_id: number;
   description: string;
   is_sensitive_content: boolean;
   logo_image: string;
@@ -142,7 +144,13 @@ interface Collection {
   nfts_count: number;
   collaborators: UserData[];
   social_links: SocialLinks;
+  category: Category;
+  volume: number;
+  min_price: number;
+  max_price: number;
 }
+
+interface Collaborators extends UserData {}
 
 interface KycData {
   id: number;
@@ -154,6 +162,7 @@ interface KycData {
   author_type?: "creator" | "collector";
   author_art_type?: string;
   passport_id?: string;
+  status: "pending" | "approved" | "rejected" | "on_review";
 }
 
 interface UserData {
@@ -212,6 +221,16 @@ type TwMainColor =
   | "gray";
 
 //
+
+type ReportType = "spam" | "trouble" | "violence" | "other";
+interface Reports {
+  id: number;
+  reported_by: UserData;
+  type: ReportType;
+  message: string;
+  created_at: Date;
+  reportable_type: "NFT" | "Collection" | "User";
+}
 
 interface LoginCredentials {
   email: string;

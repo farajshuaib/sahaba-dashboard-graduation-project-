@@ -14,6 +14,11 @@ import { isLoggedIn } from "./app/account/actions";
 import { unwrapResult } from "@reduxjs/toolkit";
 import ServerError from "./components/ServerError";
 import UserDetails from "pages/UserDetails";
+import Page404 from "pages/404";
+import CollectionDetails from "pages/CollectionDetails";
+import CategoryForm from "pages/CategoryForm";
+import NftDetails from "pages/NftDetails";
+import Reports from "pages/Reports";
 
 const router = createBrowserRouter([
   {
@@ -42,8 +47,16 @@ const router = createBrowserRouter([
         element: <Collections />,
       },
       {
+        path: "/collection/:id",
+        element: <CollectionDetails />,
+      },
+      {
         path: "/nfts",
         element: <Nfts />,
+      },
+      {
+        path: "/nft/:id",
+        element: <NftDetails />,
       },
       {
         path: "/transactions",
@@ -53,11 +66,28 @@ const router = createBrowserRouter([
         path: "/categories",
         element: <Categories />,
       },
+      {
+        path: "/category/form",
+        element: <CategoryForm />,
+      },
+      {
+        path: "/category/form/:id",
+        element: <CategoryForm />,
+      },
+      {
+        path: "/reports",
+        element: <Reports />,
+      },
     ],
   },
   {
     path: "/login",
     element: <Login />,
+    errorElement: <ServerError />,
+  },
+  {
+    path: "*",
+    element: <Page404 />,
     errorElement: <ServerError />,
   },
 ]);

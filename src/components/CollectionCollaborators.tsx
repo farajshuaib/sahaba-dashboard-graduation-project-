@@ -1,39 +1,17 @@
 import { Table } from "flowbite-react";
-import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
-import EmptyData from "../components/EmptyData";
-import LoadingScreen from "../components/LoadingScreen";
-import ServerError from "../components/ServerError";
-import { useCrud } from "../hooks/useCrud";
-import Heading from "../shared/Heading/Heading";
-import Pagination from "../shared/Pagination/Pagination";
 
-const Users: React.FC = () => {
-  const { fetch, loading, data, meta, errors } = useCrud("/users");
-  const [page, setPage] = useState<number>(1);
+interface Props {
+  children?: React.ReactNode;
+  collaborators: Collaborators[];
+}
+
+const CollectionCollaborators: React.FC<Props> = ({ collaborators }) => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetch({ page });
-  }, []);
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
-
-  if (errors) {
-    return <ServerError />;
-  }
-
-  if (data.length == 0) {
-    return <EmptyData />;
-  }
-
   return (
     <div>
-      <Heading desc="">Users</Heading>
-
       <Table>
         <Table.Head>
           {[
@@ -55,7 +33,7 @@ const Users: React.FC = () => {
           ))}
         </Table.Head>
         <Table.Body className="divide-y">
-          {data.map((user: UserData, index) => (
+          {collaborators.map((user: Collaborators, index: number) => (
             <Table.Row
               key={index}
               className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -74,12 +52,12 @@ const Users: React.FC = () => {
               ].map((item, index) => (
                 <Table.Cell
                   key={index}
-                  className="whitespace-nowrap font-medium text-gray-800 dark:text-white"
+                  className="font-medium text-gray-800 whitespace-nowrap dark:text-white"
                 >
                   <span>{`${item}`}</span>
                 </Table.Cell>
               ))}
-              <Table.Cell className="whitespace-nowrap font-medium text-gray-800 dark:text-white">
+              <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
                 <ButtonSecondary onClick={() => navigate(`/user/${user.id}`)}>
                   show details
                 </ButtonSecondary>
@@ -88,9 +66,8 @@ const Users: React.FC = () => {
           ))}
         </Table.Body>
       </Table>
-      {meta && <Pagination setPage={(page) => setPage(page)} meta={meta} />}
     </div>
   );
 };
 
-export default Users;
+export default CollectionCollaborators;

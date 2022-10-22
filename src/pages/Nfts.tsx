@@ -1,6 +1,9 @@
+import NftsTable from "components/NftsTable";
 import { Table } from "flowbite-react";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import ButtonSecondary from "shared/Button/ButtonSecondary";
 import EmptyData from "../components/EmptyData";
 import LoadingScreen from "../components/LoadingScreen";
 import ServerError from "../components/ServerError";
@@ -11,6 +14,7 @@ import Pagination from "../shared/Pagination/Pagination";
 const Nfts: React.FC = () => {
   const { fetch, loading, data, meta, errors } = useCrud("/nfts");
   const [page, setPage] = useState<number>(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch({ page });
@@ -32,30 +36,7 @@ const Nfts: React.FC = () => {
     <div>
       <Heading desc="">NFTs</Heading>
 
-      <Table>
-        <Table.Head>
-          {Object.keys(data[0]).map((key, index) => (
-            <Table.HeadCell key={index}>{key}</Table.HeadCell>
-          ))}
-        </Table.Head>
-        <Table.Body className="divide-y">
-          {data.map((user, index) => (
-            <Table.Row
-              key={index}
-              className="bg-white dark:border-gray-700 dark:bg-gray-800"
-            >
-              {Object.values(user).map((val, innerIndex) => (
-                <Table.Cell
-                  key={innerIndex}
-                  className="whitespace-nowrap font-medium text-gray-800 dark:text-white"
-                >
-                  {`${val != null ? val : "unknown"}`}
-                </Table.Cell>
-              ))}
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+      <NftsTable nfts={data} />
       {meta && <Pagination setPage={(page) => setPage(page)} meta={meta} />}
     </div>
   );

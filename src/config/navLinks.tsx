@@ -41,4 +41,10 @@ export const routerLinks: navLink[] = [
     icon: <i className='bx bx-transfer'></i>,
     isVisible: true,
   },
+  {
+    name: "Reports",
+    path: "/reports",
+    icon: <i className='bx bxs-report'></i>,
+    isVisible: true,
+  },
 ];

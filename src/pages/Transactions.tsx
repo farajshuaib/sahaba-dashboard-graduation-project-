@@ -1,4 +1,6 @@
+import TransactionsTable from "components/TransactionsTable";
 import { Table } from "flowbite-react";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import EmptyData from "../components/EmptyData";
@@ -8,7 +10,7 @@ import { useCrud } from "../hooks/useCrud";
 import Heading from "../shared/Heading/Heading";
 import Pagination from "../shared/Pagination/Pagination";
 
-const Transactions:React.FC = () => {
+const Transactions: React.FC = () => {
   const { fetch, loading, data, meta, errors } = useCrud("/transactions");
   const [page, setPage] = useState<number>(1);
 
@@ -32,33 +34,10 @@ const Transactions:React.FC = () => {
     <div>
       <Heading desc="">Transactions</Heading>
 
-      <Table>
-        <Table.Head>
-          {Object.keys(data[0]).map((key, index) => (
-            <Table.HeadCell key={index}>{key}</Table.HeadCell>
-          ))}
-        </Table.Head>
-        <Table.Body className="divide-y">
-          {data.map((user, index) => (
-            <Table.Row
-              key={index}
-              className="bg-white dark:border-gray-700 dark:bg-gray-800"
-            >
-              {Object.values(user).map((val, innerIndex) => (
-                <Table.Cell
-                  key={innerIndex}
-                  className="whitespace-nowrap font-medium text-gray-800 dark:text-white"
-                >
-                  {`${val != null ? val : "unknown"}`}
-                </Table.Cell>
-              ))}
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+      <TransactionsTable transactions={data} />
       {meta && <Pagination setPage={(page) => setPage(page)} meta={meta} />}
     </div>
   );
-}
+};
 
-export default Transactions
+export default Transactions;

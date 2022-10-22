@@ -20,15 +20,16 @@ import ButtonSecondary from "shared/Button/ButtonSecondary";
 import Heading from "shared/Heading/Heading";
 import logo_light from "../assets/logo_light.svg";
 import Pagination from "shared/Pagination/Pagination";
+import ReportsTable from "components/ReportsTable";
+import NftsTable from "components/NftsTable";
+import TransactionsTable from "components/TransactionsTable";
 
 const RenderTabUserTransactions = (userData: UserData) => {
-  const { fetch, loading, data, meta, errors } = useCrud(
-    `/users/transactions/${userData?.id}`
-  );
+  const { fetch, loading, data, meta, errors } = useCrud(`/transactions`);
   const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
-    fetch({ page });
+    fetch({ page, from: userData?.id });
   }, [page]);
 
   if (loading) {
@@ -45,50 +46,7 @@ const RenderTabUserTransactions = (userData: UserData) => {
 
   return (
     <div>
-      <Table>
-        <Table.Head>
-          {[
-            "id",
-            "from",
-            "to",
-            "nft",
-            "nft token id",
-            "price",
-            "type",
-            "date",
-          ].map((item, index) => (
-            <Table.HeadCell key={index} className="whitespace-nowrap">
-              {item}
-            </Table.HeadCell>
-          ))}
-        </Table.Head>
-        <Table.Body className="divide-y">
-          {data.map((transaction: Transactions, index) => (
-            <Table.Row
-              key={index}
-              className="bg-white dark:border-gray-700 dark:bg-gray-800"
-            >
-              {[
-                transaction.id,
-                userData.id,
-                transaction.to,
-                transaction.nft.title,
-                transaction.nft.token_id,
-                transaction.price,
-                transaction.type,
-                moment(transaction.created_at).format("YYYY-MM-DD HH:mm"),
-              ].map((item, index) => (
-                <Table.Cell
-                  key={index}
-                  className="whitespace-nowrap font-medium text-gray-800 dark:text-white"
-                >
-                  <span>{`${item}`}</span>
-                </Table.Cell>
-              ))}
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+      <TransactionsTable transactions={data} />
       {meta && <Pagination setPage={(p) => setPage(p)} meta={meta} />}
     </div>
   );
@@ -97,9 +55,11 @@ const RenderTabUserTransactions = (userData: UserData) => {
 const _renderTabUserDetails = (userData: UserData) => (
   <section className="my-8">
     <Labeled title="Wallet address" value={userData?.wallet_address} />
-    <div className="grid grid-cols-2 md:grid-cols-2  gap-5 my-8">
+    <div className="grid grid-cols-2 gap-5 my-8 md:grid-cols-2">
       <Labeled title="First name" value={userData?.first_name} />
       <Labeled title="Last name" value={userData?.last_name} />
+      <Labeled title="Banner photo" preview value={userData?.banner_photo} />
+      <Labeled title="Profile photo" preview value={userData?.profile_photo} />
       <Labeled title="Username" value={userData?.username} />
       <Labeled title="Email" value={userData?.email} />
       <Labeled
@@ -127,23 +87,28 @@ const _renderTabUserDetails = (userData: UserData) => (
         value={`${+userData?.followings_count}`}
       />
       <Labeled
+        preview
         title="Facebook page"
         value={`${userData?.social_links?.facebook_url}`}
       />
       <Labeled
+        preview
         title="Twitter page"
         value={`${userData?.social_links?.twitter_url}`}
       />
       <Labeled
+        preview
         title="Telegram page"
         value={`${userData?.social_links?.telegram_url}`}
       />
       <Labeled
         title="Website page"
+        preview
         value={`${userData?.social_links?.website_url}`}
       />
       <Labeled
         title="Instagram page"
+        preview
         value={`${userData?.social_links?.instagram_url}`}
       />
     </div>
@@ -176,7 +141,7 @@ const RenderKYCApplication = (userData: UserData) => {
               name={userData.is_verified ? "Verified" : "not verified"}
             />
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-2  gap-5 my-8">
+          <div className="grid grid-cols-2 gap-5 my-8 md:grid-cols-2">
             <Labeled
               title="Account type"
               value={userData?.kyc_form?.author_type}
@@ -193,16 +158,12 @@ const RenderKYCApplication = (userData: UserData) => {
             <Labeled title="Country" value={userData?.kyc_form?.country} />
             <Labeled title="City" value={userData?.kyc_form?.city} />
             <Labeled title="Address" value={userData?.kyc_form?.address} />
-            <div className="">
-              <label className="text-xl  text-gray700">passport id</label>
-              <a
-                href={userData?.kyc_form?.passport_id}
-                target="_blank"
-                className="my-2 text-xl text-cyan-600 block"
-              >
-                show passport id
-              </a>
-            </div>
+            <Labeled
+              title="Passport id"
+              preview
+              value={userData?.kyc_form?.passport_id}
+            />
+
             <Labeled title="Address" value={userData?.kyc_form?.passport_id} />
           </div>
           {!userData.is_verified && (
@@ -215,6 +176,96 @@ const RenderKYCApplication = (userData: UserData) => {
         <EmptyData />
       )}
     </>
+  );
+};
+
+const RenderOwnedNfts: React.FC = () => {
+  const params = useParams();
+  const { data, fetch, loading, errors, meta } = useCrud(
+    `/nfts?owner=${params.id}`
+  );
+  const [page, setPage] = useState<number>(1);
+
+  useEffect(() => {
+    fetch({ page });
+  }, []);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (errors) {
+    return <ServerError />;
+  }
+
+  if (data.length == 0) {
+    return <EmptyData />;
+  }
+
+  return (
+    <div>
+      <NftsTable nfts={data} />
+      {meta && <Pagination setPage={(p) => setPage(p)} meta={meta} />}
+    </div>
+  );
+};
+
+const RenderCreatedNfts: React.FC = () => {
+  const params = useParams();
+  const { data, fetch, loading, errors, meta } = useCrud(
+    `/nfts?creator=${params.id}`
+  );
+  const [page, setPage] = useState<number>(1);
+
+  useEffect(() => {
+    fetch({ page });
+  }, []);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (errors) {
+    return <ServerError />;
+  }
+
+  if (data.length == 0) {
+    return <EmptyData />;
+  }
+
+  return (
+    <div>
+      <NftsTable nfts={data} />
+      {meta && <Pagination setPage={(p) => setPage(p)} meta={meta} />}
+    </div>
+  );
+};
+
+const RenderUserReports: React.FC = () => {
+  const { data, loading, fetch, errors, meta } = useCrud(`/reports`);
+  const [page, setPage] = useState<number>(1);
+
+  useEffect(() => {
+    fetch({ page, reportable: "User" });
+  }, []);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (errors) {
+    return <ServerError />;
+  }
+
+  if (data.length == 0) {
+    return <EmptyData />;
+  }
+
+  return (
+    <div>
+      <ReportsTable reports={data} />
+      {meta && <Pagination setPage={(p) => setPage(p)} meta={meta} />}
+    </div>
   );
 };
 
@@ -292,22 +343,28 @@ const UserDetails: React.FC = () => {
         return <RenderTabUserTransactions {...item} />;
       case "KYC Application":
         return <RenderKYCApplication {...item} />;
+      case "Owned NFTs":
+        return <RenderOwnedNfts />;
+      case "Created NFTs":
+        return <RenderCreatedNfts />;
+      case "Reports":
+        return <RenderUserReports />;
       default:
         return <></>;
     }
   };
 
   const _renderUserCard = (userData: UserData) => (
-    <div className="bg-white rounded-lg p-5">
+    <div className="p-5 bg-white rounded-lg">
       <div className="flex items-center gap-3">
         <Avatar sizeClass="w-24 h-24" imgUrl={userData?.profile_photo} />
         <div className="flex flex-col gap-1">
-          <h4 className="text-xl">{userData?.username}</h4>
-          <h6 className="text-gray-600 text-sm">{userData?.email}</h6>
+          <h4 className="text-xl">{userData?.username || "anon"}</h4>
+          <h6 className="text-sm text-gray-600">{userData?.email || "-"}</h6>
         </div>
       </div>
       <p className="my-3">{userData?.bio}</p>
-      <div className="my-2 flex items-center flex-wrap gap-3">
+      <div className="flex flex-wrap items-center gap-3 my-2">
         <Badge
           name={`Account: ${userData?.status}`}
           color={userData?.status == "enabled" ? "green" : "red"}
@@ -327,20 +384,29 @@ const UserDetails: React.FC = () => {
   );
 
   const _renderAccountBalance = () => (
-    <div className="bg-primary-700 rounded-lg p-5 text-white flex items-center gap-4">
+    <div className="flex items-center gap-4 p-5 text-white rounded-lg bg-primary-700">
       <img src={logo_light} alt="sahaba" className="h-24" />
       <div className="">
-        <h5 className="uppercase text-xl font-medium">total balance</h5>
+        <h5 className="text-xl font-medium uppercase">total balance</h5>
         <span>{accountTotalBalance} NFTs</span>
       </div>
     </div>
   );
 
+  const Tabs = [
+    "Info",
+    "KYC Application",
+    "Transactions",
+    "Reports",
+    "Created NFTs",
+    "Owned NFTs",
+  ];
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-      <section className="col-span-8 bg-white p-4 rounded-lg shadow-sm">
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
+      <section className="col-span-8 p-4 bg-white rounded-lg shadow-sm">
         <Heading desc="">User Details</Heading>
-        <div className="flex my-5 justify-end">
+        <div className="flex justify-end my-5">
           <button
             onClick={toggleAccountStatus}
             className={`text-white px-3 py-2 rounded-lg text-sm ${
@@ -359,12 +425,12 @@ const UserDetails: React.FC = () => {
           </button>
         </div>
         <Tab.Group>
-          <Tab.List className="flex justify-start gap-3 rounded-full pd-1 ">
-            {["Info", "KYC Application", "Transactions"].map((tab) => (
+          <Tab.List className="flex justify-start gap-3 overflow-scroll rounded-full pd-1">
+            {Tabs.map((tab) => (
               <Tab
                 key={tab}
                 className={({ selected }) =>
-                  `px-3.5 sm:px-8 py-1.5 sm:py-2 text-xs sm:text-sm leading-5 font-medium rounded-full focus:outline-none focus:ring-2 ring-primary-300 ${
+                  `px-3.5 whitespace-nowrap sm:px-8 py-1.5 sm:py-2 text-xs sm:text-sm leading-5 font-medium rounded-full focus:outline-none focus:ring-2 ring-primary-300 ${
                     selected
                       ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
                       : "text-neutral-700 dark:text-neutral-300 bg-neutral-100/70 dark:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100"
@@ -376,7 +442,7 @@ const UserDetails: React.FC = () => {
             ))}
           </Tab.List>
           <Tab.Panels className="mt-4">
-            {["Info", "KYC Application", "Transactions"].map((tab, idx) => (
+            {Tabs.map((tab, idx) => (
               <Tab.Panel
                 key={idx}
                 className={
@@ -389,7 +455,7 @@ const UserDetails: React.FC = () => {
           </Tab.Panels>
         </Tab.Group>
       </section>
-      <section className="col-span-4 flex flex-col gap-5">
+      <section className="flex flex-col col-span-4 gap-5">
         {_renderUserCard(item)}
         {_renderAccountBalance()}
       </section>

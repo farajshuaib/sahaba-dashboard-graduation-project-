@@ -1,3 +1,8 @@
+import {
+  AxiosHeaders,
+  AxiosRequestHeaders,
+  RawAxiosRequestHeaders,
+} from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useApi } from "./useApi";
@@ -101,13 +106,17 @@ export function useCrud(url: string, options?: Options) {
     });
   };
 
-  const create = async (payload?: any, headers?: any) => {
+  const create = async (
+    payload?: any,
+    headersProps?: RawAxiosRequestHeaders
+  ) => {
     return new Promise(async (resolve, reject) => {
       try {
+        console.log("headersProps", headersProps);
         const { data } = await api.post(
           `${url}`,
           payload,
-          headers && { headers }
+          headersProps && { headers: headersProps }
         );
         resolve(data);
       } catch (error: any) {
@@ -131,7 +140,7 @@ export function useCrud(url: string, options?: Options) {
   }: {
     id: string | number;
     payload: any;
-    headers?: any;
+    headers?: RawAxiosRequestHeaders;
   }) => {
     setState((prevState) => ({
       ...prevState,
@@ -139,7 +148,7 @@ export function useCrud(url: string, options?: Options) {
     }));
     return new Promise(async (resolve, reject) => {
       try {
-        const { data } = await api.put(
+        const { data } = await api.post(
           `${url}/${id}`,
           payload,
           headers && { headers }

@@ -1,6 +1,8 @@
 import { Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import ButtonPrimary from "shared/Button/ButtonPrimary";
+import ButtonSecondary from "shared/Button/ButtonSecondary";
 import EmptyData from "../components/EmptyData";
 import LoadingScreen from "../components/LoadingScreen";
 import ServerError from "../components/ServerError";
@@ -11,6 +13,7 @@ import Pagination from "../shared/Pagination/Pagination";
 const Categories: React.FC = () => {
   const { fetch, loading, data, meta, errors } = useCrud("/categories");
   const [page, setPage] = useState<number>(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch({ page });
@@ -32,26 +35,60 @@ const Categories: React.FC = () => {
     <div>
       <Heading desc="">Categories</Heading>
 
+      <div className="flex justify-end my-8">
+        <ButtonPrimary href="/category/form">Create New Category</ButtonPrimary>
+      </div>
+
       <Table>
         <Table.Head>
-          {Object.keys(data[0]).map((key, index) => (
-            <Table.HeadCell key={index}>{key}</Table.HeadCell>
+          {[
+            "id",
+            "name",
+            "number of collection",
+            "number of NFTs",
+            "icon",
+            "action",
+          ].map((key, index) => (
+            <Table.HeadCell className="whitespace-nowrap" key={index}>
+              {key}
+            </Table.HeadCell>
           ))}
         </Table.Head>
         <Table.Body className="divide-y">
-          {data.map((user, index) => (
+          {data.map((category: Category, index) => (
             <Table.Row
               key={index}
               className="bg-white dark:border-gray-700 dark:bg-gray-800"
             >
-              {Object.values(user).map((val, innerIndex) => (
+              {[
+                category.id,
+                category.name,
+                category.collections_count,
+                category.nfts_count,
+              ].map((val, innerIndex) => (
                 <Table.Cell
                   key={innerIndex}
-                  className="whitespace-nowrap font-medium text-gray-800 dark:text-white"
+                  className="font-medium text-gray-800 whitespace-nowrap dark:text-white"
                 >
-                  {`${val != null ? val : "unknown"}`}
+                  {`${val.toString() || "unknown"}`}
                 </Table.Cell>
               ))}
+              <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
+                <a
+                  href={category.icon}
+                  target="_blank"
+                  className="items-center text-blue-500"
+                >
+                  <span>preview icon</span>
+                </a>
+              </Table.Cell>
+              <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
+                <ButtonSecondary
+                  onClick={() => navigate(`/category/form/${category.id}`)}
+                >
+                  edit
+                </ButtonSecondary>
+              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
