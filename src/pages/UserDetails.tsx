@@ -6,7 +6,7 @@ import LoadingScreen from "components/LoadingScreen";
 import ServerError from "components/ServerError";
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from "constant";
 import { Contract } from "ethers";
-import { Table, Tabs } from "flowbite-react";
+import { Dropdown, Table, Tabs } from "flowbite-react";
 import { useApi } from "hooks/useApi";
 import { useCrud } from "hooks/useCrud";
 import moment from "moment";
@@ -118,17 +118,21 @@ const _renderTabUserDetails = (userData: UserData) => (
 
 const RenderKYCApplication = (userData: UserData) => {
   const api = useApi();
-  const [verifyLoading, setVerifyLoading] = useState<boolean>(false);
+  const [changeStatusLoading, setChangeStatusLoading] =
+    useState<boolean>(false);
 
-  const verifyAccount = async () => {
+  const changeKYCStatus = async (status: string) => {
     try {
-      setVerifyLoading(true);
-      const { data } = await api.post(`/users/verify-account/${userData.id}`);
+      setChangeStatusLoading(true);
+      const { data } = await api.post(
+        `/kyc/change-account-status/${userData.kyc_form.id}`,
+        { status }
+      );
       toast.success(data.message);
-      setVerifyLoading(false);
+      setChangeStatusLoading(false);
     } catch (error: any) {
-      setVerifyLoading(false);
-      toast.error(error.response?.data?.message);
+      setChangeStatusLoading(false);
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -136,13 +140,23 @@ const RenderKYCApplication = (userData: UserData) => {
     <>
       {userData.kyc_form ? (
         <div>
-          <div className="flex justify-end my-5">
+          <section className="flex  my-5 gap-5 justify-end">
             <Badge
-              color={userData.is_verified ? "green" : "red"}
-              name={userData.is_verified ? "Verified" : "not verified"}
+              color={
+                userData?.kyc_form?.status == "approved"
+                  ? "green"
+                  : userData?.kyc_form?.status == "pending"
+                  ? "yellow"
+                  : userData?.kyc_form?.status == "rejected"
+                  ? "red"
+                  : userData?.kyc_form?.status == "on_review"
+                  ? "blue"
+                  : "gray"
+              }
+              name={userData.kyc_form?.status}
             />
-          </div>
-          <div className="grid grid-cols-2 gap-5 my-8 md:grid-cols-2">
+          </section>
+          <section className="grid grid-cols-2 gap-5 my-8 md:grid-cols-2">
             <Labeled
               title="Account type"
               value={userData?.kyc_form?.author_type}
@@ -166,12 +180,25 @@ const RenderKYCApplication = (userData: UserData) => {
             />
 
             <Labeled title="Address" value={userData?.kyc_form?.passport_id} />
-          </div>
-          {!userData.is_verified && (
-            <ButtonPrimary loading={verifyLoading} onClick={verifyAccount}>
-              Verify Account
-            </ButtonPrimary>
-          )}
+          </section>
+          <section className="flex  my-5 gap-5 justify-end">
+            <Dropdown
+              label={changeStatusLoading ? "loading..." : "change status"}
+            >
+              <Dropdown.Item onClick={() => changeKYCStatus("approved")}>
+                approved
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => changeKYCStatus("rejected")}>
+                rejected
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => changeKYCStatus("pending")}>
+                pending
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => changeKYCStatus("on_review")}>
+                on_review
+              </Dropdown.Item>
+            </Dropdown>
+          </section>
         </div>
       ) : (
         <EmptyData />
@@ -368,7 +395,7 @@ const UserDetails: React.FC = () => {
       <div className="flex flex-wrap items-center gap-3 my-2">
         <Badge
           name={`Account: ${userData?.status}`}
-          color={userData?.status == "enabled" ? "green" : "red"}
+          color={userData?.status == "active" ? "green" : "red"}
         />
         <Badge
           name={`Email: ${
@@ -377,8 +404,18 @@ const UserDetails: React.FC = () => {
           color={userData?.email_verified_at ? "green" : "red"}
         />
         <Badge
-          name={`KYC: ${userData?.is_verified ? "verified" : "not verified"}`}
-          color={userData?.is_verified ? "green" : "yellow"}
+          name={`KYC: ${userData?.kyc_form?.status}`}
+          color={
+            userData?.kyc_form?.status == "approved"
+              ? "green"
+              : userData?.kyc_form?.status == "pending"
+              ? "yellow"
+              : userData?.kyc_form?.status == "rejected"
+              ? "red"
+              : userData?.kyc_form?.status == "on_review"
+              ? "blue"
+              : "gray"
+          }
         />
       </div>
     </div>
@@ -411,16 +448,16 @@ const UserDetails: React.FC = () => {
           <button
             onClick={toggleAccountStatus}
             className={`text-white px-3 py-2 rounded-lg text-sm ${
-              item.status == "enabled" ? "bg-red-600" : "bg-green-600"
+              item.status == "active" ? "bg-red-600" : "bg-green-600"
             }`}
           >
             {changingStatusLoading ? (
               <i className="bx bx-loader"></i>
             ) : (
               <span>
-                {item.status == "enabled"
-                  ? "Disable account"
-                  : "Enable account"}
+                {item.status == "active"
+                  ? "Suspend account"
+                  : "Activate account"}
               </span>
             )}
           </button>

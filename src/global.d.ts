@@ -175,8 +175,7 @@ interface UserData {
   bio: string;
   profile_photo: string;
   banner_photo: string;
-  is_verified: boolean;
-  status: "enabled" | "suspended";
+  status: "active" | "suspended";
   is_followed?: boolean;
   is_subscribed: boolean;
   social_links: SocialLinks;

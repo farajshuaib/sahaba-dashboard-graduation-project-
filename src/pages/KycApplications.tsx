@@ -1,7 +1,8 @@
-import { Table } from "flowbite-react";
+import { Dropdown, Table } from "flowbite-react";
 import { useApi } from "hooks/useApi";
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 import Badge from "shared/Badge/Badge";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
 import { getUserSlug } from "utils/functions";
@@ -33,8 +34,6 @@ const KycApplications: React.FC = () => {
     return <EmptyData />;
   }
 
-  const toggleUserKyc = (user: UserData) => {};
-
   return (
     <div>
       <Heading desc="">KYC Applications</Heading>
@@ -53,9 +52,8 @@ const KycApplications: React.FC = () => {
             "art type",
             "passport id",
             "status",
-            "action",
           ].map((key, index) => (
-            <Table.HeadCell key={index}>{key}</Table.HeadCell>
+            <Table.HeadCell className="whitespace-nowrap" key={index}>{key}</Table.HeadCell>
           ))}
         </Table.Head>
         <Table.Body className="divide-y">
@@ -113,14 +111,6 @@ const KycApplications: React.FC = () => {
                   }
                   name={user.kyc_form.status}
                 />
-              </Table.Cell>
-              <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
-                <ButtonSecondary
-                  onClick={() => toggleUserKyc(user)}
-                  className=""
-                >
-                  {user.is_verified ? "remove verification" : "Approve"}
-                </ButtonSecondary>
               </Table.Cell>
             </Table.Row>
           ))}
