@@ -64,13 +64,13 @@ const Users: React.FC = () => {
             >
               {[
                 user.id,
-                user.first_name ,
-                user.last_name ,
-                getUserSlug(user) ,
-                user.email ,
-                user.wallet_address ,
-                user.created_nfts_count ,
-                user.owned_nfts_count ,
+                user.first_name,
+                user.last_name,
+                getUserSlug(user),
+                user.email,
+                user.wallet_address,
+                user.created_nfts_count,
+                user.owned_nfts_count,
                 user.is_subscribed ? "yes" : "no",
               ].map((item, index) => (
                 <Table.Cell
@@ -82,20 +82,16 @@ const Users: React.FC = () => {
               ))}
 
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
-                {user.status == "active" ? (
-                  <Badge
-                    color={
-                      user.status == "active"
-                        ? "green"
-                        : user.status == "suspended"
-                        ? "red"
-                        : "blue"
-                    }
-                    name={user.status}
-                  />
-                ) : (
-                  <Badge color="red" name="" />
-                )}
+                <Badge
+                  color={
+                    user.status == "active"
+                      ? "green"
+                      : user.status == "suspended"
+                      ? "red"
+                      : "blue"
+                  }
+                  name={user.status}
+                />
               </Table.Cell>
 
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">

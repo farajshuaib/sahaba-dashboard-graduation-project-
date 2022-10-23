@@ -5,6 +5,7 @@ import LoadingScreen from "components/LoadingScreen";
 import ReportsTable from "components/ReportsTable";
 import ServerError from "components/ServerError";
 import TransactionsTable from "components/TransactionsTable";
+import { useApi } from "hooks/useApi";
 import { useCrud } from "hooks/useCrud";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -107,6 +108,7 @@ const NftDetails: React.FC = () => {
   const { fetchById, loading, item, errors } = useCrud(`/nfts`);
   const [changingStatusLoading, setChangingStatusLoading] = useState(false);
   const navigate = useNavigate();
+  const api = useApi();
 
   const Tabs = ["Info", "Transactions", "Reports"];
 
@@ -119,7 +121,19 @@ const NftDetails: React.FC = () => {
     fetchById(params.id);
   }, []);
 
-  const toggleNFTStatus = () => {};
+  const toggleNFTStatus = async () => {
+    if (!item) return;
+    try {
+      setChangingStatusLoading(true);
+      const { data } = await api.put(`/nfts/change-status/${item.id}`);
+      toast.success(data.message);
+      fetchById(item.id);
+      setChangingStatusLoading(false);
+    } catch (error: any) {
+      setChangingStatusLoading(false);
+      toast.error(error.response?.data?.message || "Something went wrong");
+    }
+  };
 
   if (loading) {
     return <LoadingScreen />;
