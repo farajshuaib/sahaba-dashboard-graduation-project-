@@ -10,7 +10,7 @@ globalThis.Buffer = Buffer;
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <Wrapper>
+    <Wrapper >
       <RouterProvider router={router} />
     </Wrapper>
   </React.StrictMode>

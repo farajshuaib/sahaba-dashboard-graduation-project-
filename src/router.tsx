@@ -1,4 +1,9 @@
-import { createBrowserRouter, Link, redirect } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Link,
+  Navigate,
+  redirect,
+} from "react-router-dom";
 import Layout from "./components/Layouts";
 import Categories from "./pages/Categories";
 import Collections from "./pages/Collections";
@@ -9,8 +14,6 @@ import Nfts from "./pages/Nfts";
 import Transactions from "./pages/Transactions";
 import Users from "./pages/Users";
 
-
-
 import ServerError from "./components/ServerError";
 import UserDetails from "pages/UserDetails";
 import Page404 from "pages/404";
@@ -19,11 +22,14 @@ import CategoryForm from "pages/CategoryForm";
 import NftDetails from "pages/NftDetails";
 import Reports from "pages/Reports";
 import Subscribers from "pages/Subscribers";
+import { store } from "app/store";
+
+const userData: UserData = store.getState().account.userData;
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: userData ? <Layout /> : <Navigate to="/login" />,
     errorElement: <ServerError />,
     children: [
       {
@@ -81,12 +87,17 @@ const router = createBrowserRouter([
       {
         path: "/subscribers",
         element: <Subscribers />,
-      }
+      },
+      {
+        path: "*",
+        element: <Page404 />,
+        errorElement: <ServerError />,
+      },
     ],
   },
   {
     path: "/login",
-    element: <Login />,
+    element: userData ? <Navigate to="/" /> : <Login />,
     errorElement: <ServerError />,
   },
   {

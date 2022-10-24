@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Web3ReactProvider } from "@web3-react/core";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
@@ -6,7 +6,9 @@ import { ethers } from "ethers";
 import { ToastContainer } from "react-toastify";
 import { persistor, store } from "../app/store";
 import { Web3Provider } from "@ethersproject/providers";
-
+import { useAppDispatch } from "app/hooks";
+import LoadingScreen from "components/LoadingScreen";
+import { isLoggedIn } from "app/account/actions";
 //
 import "../styles/index.scss";
 import "../styles/index.css";
@@ -21,12 +23,28 @@ const getLibrary = (provider: any): Web3Provider => {
 interface Props {
   children: React.ReactNode;
 }
+
+const AuthState: React.FC<Props> = ({ children }) => {
+  const [loading, setLoading] = useState<boolean>(true);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(isLoggedIn()).finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  return <>{children}</>;
+};
+
 const Wrapper: React.FC<Props> = ({ children }) => {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          {children}
+          <AuthState>{children}</AuthState>
           <ToastContainer
             position="top-center"
             autoClose={5000}

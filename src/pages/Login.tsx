@@ -15,32 +15,9 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import LoadingScreen from "../components/LoadingScreen";
 
 const Login: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState<string>("");
-  const userData = useAppSelector((state) => state.account.userData);
-
-  useEffect(() => {
-    if (userData) {
-      navigate("/");
-    } else {
-      dispatch(isLoggedIn())
-        .then(unwrapResult)
-        .then((res: any) => {
-          if (res.message == "success") {
-            navigate("/");
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, []);
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
 
   return (
     <div
@@ -52,10 +29,9 @@ const Login: React.FC = () => {
         validationSchema={loginSchema}
         onSubmit={async (values, { setSubmitting }) => {
           setError("");
-
           try {
             const resultAction = await dispatch(login(values));
-            const originalPromiseResult = unwrapResult(resultAction);
+            unwrapResult(resultAction);
             setSubmitting(false);
             navigate("/");
           } catch (error: any) {

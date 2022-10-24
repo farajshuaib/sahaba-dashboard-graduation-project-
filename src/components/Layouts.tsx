@@ -330,40 +330,7 @@ const SideBar = forwardRef((props: SideBarProps, drawer: any) => {
 
 const Layout: React.FC = () => {
   const [toggleSideBar, setToggleSideBar] = useState<boolean>(false);
-
-  const [loading, setLoading] = useState<boolean>(true);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const drawer = useRef(null);
-
-  const getData = async () => {
-    try {
-      setLoading(false);
-    } catch (e) {}
-  };
-
-  const checkAuth = () => {
-    dispatch(isLoggedIn())
-      .then(unwrapResult)
-      .then((res: any) => {
-        if (res.message == "failed") {
-          navigate("/login");
-        }
-      })
-      .catch((error) => {
-        if (error.status != 200) {
-          navigate("/login");
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    checkAuth();
-    getData();
-  }, []);
 
   useClickAway(drawer, () => {
     if (toggleSideBar) {
@@ -371,15 +338,8 @@ const Layout: React.FC = () => {
     }
   });
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
-
   return (
-    <div
-      data-testid="MainLayout"
-      className="relative overflow-hidden bg-gray100 "
-    >
+    <div className="relative overflow-hidden bg-gray100 ">
       <Nav setToggleSideBar={(val: boolean) => setToggleSideBar(val)} />
       <div className="relative flex w-full h-full">
         <SideBar
@@ -389,15 +349,9 @@ const Layout: React.FC = () => {
         />
 
         <main className="relative w-full h-full mx-auto md:pl-72 md:pt-16">
-          {loading ? (
-            <LoadingScreen />
-          ) : (
-            <>
-              <div className="w-full min-h-screen p-5 mb-16 md:p-8">
-                <Outlet />
-              </div>
-            </>
-          )}
+          <div className="w-full min-h-screen p-5 mb-16 md:p-8">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>
