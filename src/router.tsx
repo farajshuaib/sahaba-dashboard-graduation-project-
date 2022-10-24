@@ -9,9 +9,8 @@ import Nfts from "./pages/Nfts";
 import Transactions from "./pages/Transactions";
 import Users from "./pages/Users";
 
-import { store } from "./app/store";
-import { isLoggedIn } from "./app/account/actions";
-import { unwrapResult } from "@reduxjs/toolkit";
+
+
 import ServerError from "./components/ServerError";
 import UserDetails from "pages/UserDetails";
 import Page404 from "pages/404";
@@ -19,6 +18,7 @@ import CollectionDetails from "pages/CollectionDetails";
 import CategoryForm from "pages/CategoryForm";
 import NftDetails from "pages/NftDetails";
 import Reports from "pages/Reports";
+import Subscribers from "pages/Subscribers";
 
 const router = createBrowserRouter([
   {
@@ -78,6 +78,10 @@ const router = createBrowserRouter([
         path: "/reports",
         element: <Reports />,
       },
+      {
+        path: "/subscribers",
+        element: <Subscribers />,
+      }
     ],
   },
   {

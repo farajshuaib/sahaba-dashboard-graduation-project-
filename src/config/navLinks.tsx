@@ -47,4 +47,10 @@ export const routerLinks: navLink[] = [
     icon: <i className='bx bxs-report'></i>,
     isVisible: true,
   },
+  {
+    name: "Subscribers",
+    path: "/subscribers",
+    icon: <i className='bx bxs-captions'></i>,
+    isVisible: true,
+  }
 ];
