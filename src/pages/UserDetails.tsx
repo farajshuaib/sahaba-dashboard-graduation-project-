@@ -352,7 +352,7 @@ const UserDetails: React.FC = () => {
   const toggleAccountStatus = async () => {
     try {
       setChangingStatusLoading(true);
-      const { data } = await api.post(`/users/toggle-status/${item.id}`);
+      const { data } = await api.put(`/users/toggle-status/${item.id}`);
       toast.success(data.message);
       await fetchById(item.id);
       setChangingStatusLoading(false);
