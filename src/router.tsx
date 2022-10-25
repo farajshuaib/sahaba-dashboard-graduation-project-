@@ -1,15 +1,10 @@
-import {
-  createBrowserRouter,
-  Link,
-  Navigate,
-  redirect,
-} from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Layout from "./components/Layouts";
 import Categories from "./pages/Categories";
 import Collections from "./pages/Collections";
 import Home from "./pages/Home";
 import KycApplications from "./pages/KycApplications";
-import Login from "./pages/Login";
+import Login from "./pages/Auth/Login";
 import Nfts from "./pages/Nfts";
 import Transactions from "./pages/Transactions";
 import Users from "./pages/Users";
@@ -23,6 +18,8 @@ import NftDetails from "pages/NftDetails";
 import Reports from "pages/Reports";
 import Subscribers from "pages/Subscribers";
 import { store } from "app/store";
+import ForgetPassword from "pages/Auth/ForgotPassword";
+import ResetPassword from "pages/Auth/ResetPassword";
 
 const userData: UserData = store.getState().account.userData;
 
@@ -98,6 +95,16 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: userData ? <Navigate to="/" /> : <Login />,
+    errorElement: <ServerError />,
+  },
+  {
+    path: "/forgot-password",
+    element: userData ? <Navigate to="/" /> : <ForgetPassword />,
+    errorElement: <ServerError />,
+  },
+  {
+    path: "/reset-password",
+    element: userData ? <Navigate to="/" /> : <ResetPassword />,
     errorElement: <ServerError />,
   },
   {

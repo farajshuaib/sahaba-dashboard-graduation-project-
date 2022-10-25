@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
-import { loginSchema } from "../services/validations";
+import { loginSchema } from "../../services/validations";
 
 // import { Link } from "react-router-dom";
 import { useNavigate, useNavigation } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import banner from "../assets/SAHABA.png";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { isLoggedIn, login } from "../app/account/actions";
-import ButtonPrimary from "../shared/Button/ButtonPrimary";
-import Input from "../shared/Input/Input";
-import { Alert } from "../shared/Alert/Alert";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { isLoggedIn, login } from "../../app/account/actions";
+import ButtonPrimary from "../../shared/Button/ButtonPrimary";
+import Input from "../../shared/Input/Input";
+import { Alert } from "../../shared/Alert/Alert";
 import { unwrapResult } from "@reduxjs/toolkit";
-import LoadingScreen from "../components/LoadingScreen";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
