@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Form, Formik } from "formik";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
-import logo from "../../assets/images/logo.png";
+import logo from "../../assets/logo.svg";
 import { toast } from "react-toastify";
 import { resetPasswordSchema } from "../../services/validations";
 import { useApi } from "hooks/useApi";

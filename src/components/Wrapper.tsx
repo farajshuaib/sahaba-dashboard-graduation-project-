@@ -9,10 +9,14 @@ import { Web3Provider } from "@ethersproject/providers";
 import { useAppDispatch } from "app/hooks";
 import LoadingScreen from "components/LoadingScreen";
 import { isLoggedIn } from "app/account/actions";
-//
+import { useRoutes } from "react-router-dom";
+import router from "router";
+
+
 import "../styles/index.scss";
 import "../styles/index.css";
 import "react-toastify/dist/ReactToastify.css";
+
 
 const getLibrary = (provider: any): Web3Provider => {
   const library = new ethers.providers.Web3Provider(provider);
@@ -39,12 +43,19 @@ const AuthState: React.FC<Props> = ({ children }) => {
   return <>{children}</>;
 };
 
-const Wrapper: React.FC<Props> = ({ children }) => {
+const RenderRoutes = () => {
+  const routes = useRoutes(router());
+  return routes;
+};
+
+const Wrapper: React.FC = () => {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <AuthState>{children}</AuthState>
+          <AuthState>
+            <RenderRoutes />
+          </AuthState>
           <ToastContainer
             position="top-center"
             autoClose={5000}

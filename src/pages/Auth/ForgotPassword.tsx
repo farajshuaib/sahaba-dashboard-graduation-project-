@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/images/logo.png";
 import { toast } from "react-toastify";
 import { useApi } from "hooks/useApi";
 import Input from "shared/Input/Input";
