@@ -73,7 +73,7 @@ const Login: React.FC = () => {
                   />
                   <ErrorMessage
                     component={"p"}
-                    className="error-text"
+                    className="text-red-500"
                     name="email"
                   />
                 </div>
@@ -96,7 +96,7 @@ const Login: React.FC = () => {
                   />
                   <ErrorMessage
                     component={"p"}
-                    className="error-text"
+                    className="text-red-500"
                     name="password"
                   />
                 </div>

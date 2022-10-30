@@ -20,6 +20,7 @@ import Subscribers from "pages/Subscribers";
 import ForgetPassword from "pages/Auth/ForgotPassword";
 import ResetPassword from "pages/Auth/ResetPassword";
 import { useAppSelector } from "app/hooks";
+import MyProfile from "pages/MyProfile";
 
 const router = () => {
   const userData: UserData = useAppSelector((state) => state.account.userData);
@@ -84,6 +85,10 @@ const router = () => {
         {
           path: "/subscribers",
           element: <Subscribers />,
+        },
+        {
+          path: "/my-profile",
+          element: <MyProfile />,
         },
         {
           path: "*",

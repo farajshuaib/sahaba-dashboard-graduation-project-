@@ -98,7 +98,8 @@ const CategoryForm: React.FC = () => {
                   value={values.name}
                   onChange={handleChange("name")}
                 />
-                <ErrorMessage name="name" />
+                <ErrorMessage name="name" component="p"
+                    className="text-red-500" />
               </div>
               <div className="flex items-center gap-4 my-5">
                 <Avatar sizeClass="w-16 h-16" imgUrl={categoryIcon} />
@@ -116,7 +117,8 @@ const CategoryForm: React.FC = () => {
                       setCategoryIcon(URL.createObjectURL(e.target.files[0]));
                     }}
                   />
-                  <ErrorMessage name="icon" />
+                  <ErrorMessage name="icon" component="p"
+                    className="text-red-500" />
                 </div>
               </div>
               <div>
