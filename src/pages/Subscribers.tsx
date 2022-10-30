@@ -1,3 +1,4 @@
+import EmptyData from "components/EmptyData";
 import LoadingScreen from "components/LoadingScreen";
 import ServerError from "components/ServerError";
 import { Modal, Table } from "flowbite-react";
@@ -29,6 +30,10 @@ const Subscribers: React.FC = () => {
 
   if (errors) {
     return <ServerError />;
+  }
+
+  if(data.length === 0) {
+    return <EmptyData />
   }
 
   return (
