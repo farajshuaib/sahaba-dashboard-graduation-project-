@@ -16,7 +16,8 @@ const CategoryForm: React.FC = () => {
   const { fetchById, loading, errors, update, create, setLoading } =
     useCrud("/categories");
   const [initFormState, setInitFormState] = useState({
-    name: "",
+    name_en: "",
+    name_ar: "",
     icon: "",
   });
   const [categoryIcon, setCategoryIcon] = useState("");
@@ -25,12 +26,13 @@ const CategoryForm: React.FC = () => {
     if (params.id) {
       setLoading(true);
       fetchById(params.id)
-        .then((data: any) => {
+        .then(({data, icon}: any) => {
           setInitFormState({
-            name: data.name,
+            name_en: data.name_en,
+            name_ar: data.name_ar,
             icon: "",
           });
-          setCategoryIcon(data.icon);
+          setCategoryIcon(icon);
         })
         .finally(() => setLoading(false));
     } else {
@@ -57,7 +59,8 @@ const CategoryForm: React.FC = () => {
           enableReinitialize
           onSubmit={async (values) => {
             const form = new FormData();
-            form.append("name", values.name);
+            form.append("name_ar", values.name_ar);
+            form.append("name_en", values.name_en);
             form.append("icon", values.icon);
             if (params.id) {
               form.append("_method", "PUT");
@@ -81,7 +84,6 @@ const CategoryForm: React.FC = () => {
         >
           {({
             values,
-            errors,
             handleChange,
             setFieldValue,
             handleSubmit,
@@ -89,18 +91,48 @@ const CategoryForm: React.FC = () => {
           }) => (
             <div>
               <div className="my-5">
-                <label className="block text-sm font-medium text-gray-700">
-                  name
+                <label
+                  htmlFor="name_en"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Name in english
                 </label>
                 <Input
-                  name="name"
+                  id="name_en"
+                  name="name_en"
                   type={"text"}
-                  value={values.name}
-                  onChange={handleChange("name")}
+                  value={values.name_en}
+                  onChange={handleChange("name_en")}
+                  placeholder="example: art"
                 />
-                <ErrorMessage name="name" component="p"
-                    className="text-red-500" />
+                <ErrorMessage
+                  name="name_en"
+                  component="p"
+                  className="text-red-500"
+                />
               </div>
+              <div className="my-5">
+                <label
+                  htmlFor="name_ar"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Name in arabic
+                </label>
+                <Input
+                  id="name_ar"
+                  name="name_ar"
+                  type={"text"}
+                  value={values.name_ar}
+                  onChange={handleChange("name_ar")}
+                  placeholder="الفنون"
+                />
+                <ErrorMessage
+                  name="name_ar"
+                  component="p"
+                  className="text-red-500"
+                />
+              </div>
+
               <div className="flex items-center gap-4 my-5">
                 <Avatar sizeClass="w-16 h-16" imgUrl={categoryIcon} />
                 <div className="">
@@ -117,8 +149,11 @@ const CategoryForm: React.FC = () => {
                       setCategoryIcon(URL.createObjectURL(e.target.files[0]));
                     }}
                   />
-                  <ErrorMessage name="icon" component="p"
-                    className="text-red-500" />
+                  <ErrorMessage
+                    name="icon"
+                    component="p"
+                    className="text-red-500"
+                  />
                 </div>
               </div>
               <div>
