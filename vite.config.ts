@@ -29,7 +29,7 @@ export default defineConfig({
       manifest: {
         name: "sahaba NFT marketplace",
         short_name: "SHB",
-        description: "",
+        description: "Create, Explore, & Collect Digital Art NFTs. Buy, sell, and showcase NFTs",
         theme_color: "#0084c7",
         background_color: "#fff",
         icons: [
