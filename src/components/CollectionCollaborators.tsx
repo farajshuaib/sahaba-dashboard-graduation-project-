@@ -46,7 +46,7 @@ const CollectionCollaborators: React.FC<Props> = ({ collaborators }) => {
                 getUserSlug(user) || "-",
                 user.email || "-",
                 user.wallet_address || "-",
-                user.is_verified ? "yes" : "no",
+                user.kyc_form?.status || "-",
                 user.created_nfts_count || "-",
                 user.owned_nfts_count || "-",
                 user.is_subscribed ? "yes" : "no",
