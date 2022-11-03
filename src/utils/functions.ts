@@ -92,9 +92,9 @@ export function copyToClipboard(value: string) {
 export const getUserSlug = (userData: UserData) => {
   return (
     userData?.username ||
-    userData.wallet_address.slice(0, 5) +
+    userData?.wallet_address.slice(0, 5) +
       "..." +
-      userData.wallet_address.slice(-5)
+      userData?.wallet_address.slice(-5)
   );
 };
 

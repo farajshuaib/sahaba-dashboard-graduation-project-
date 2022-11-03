@@ -42,14 +42,14 @@ const NftsTable: React.FC<Props> = ({ nfts }) => {
               className="bg-white dark:border-gray-700 dark:bg-gray-800"
             >
               {[
-                nft.id,
-                nft.token_id,
-                nft.title,
-                nft.price,
-                nft.is_for_sale,
-                nft.like_count,
-                nft.watch_time,
-                moment(nft.created_at).format("DD/MM/YYYY HH:mm"),
+                nft?.id,
+                nft?.token_id,
+                nft?.title,
+                nft?.price,
+                nft?.is_for_sale,
+                nft?.like_count,
+                nft?.watch_time,
+                moment(nft?.created_at).format("DD/MM/YYYY HH:mm"),
               ].map((val, innerIndex) => (
                 <Table.Cell
                   key={innerIndex}
@@ -60,25 +60,25 @@ const NftsTable: React.FC<Props> = ({ nfts }) => {
               ))}
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
                 <NavLink
-                  to={`/collection/${nft.collection.id}`}
+                  to={`/collection/${nft?.collection?.id}`}
                   className="link"
                 >
-                  <span>{nft.collection.name}</span>
+                  <span>{nft.collection?.name}</span>
                 </NavLink>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
-                <NavLink to={`/user/${nft.creator.id}`} className="link">
-                  <span>{getUserSlug(nft.creator)}</span>
+                <NavLink to={`/user/${nft.creator?.id}`} className="link">
+                  <span>{getUserSlug(nft?.creator)}</span>
                 </NavLink>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
-                <NavLink to={`/user/${nft.owner.id}`} className="link">
-                  <span>{getUserSlug(nft.owner)}</span>
+                <NavLink to={`/user/${nft?.owner?.id}`} className="link">
+                  <span>{getUserSlug(nft?.owner)}</span>
                 </NavLink>
               </Table.Cell>
 
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
-                <a href={nft.file_path} target="_blank" className="link">
+                <a href={nft?.file_path} target="_blank" className="link">
                   <i className="bx bx-image-alt"></i>
                   <span>preview</span>
                 </a>
