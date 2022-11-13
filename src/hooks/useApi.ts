@@ -1,6 +1,5 @@
 import { useWeb3React } from "@web3-react/core";
 import axios, { AxiosInstance } from "axios";
-import i18next from "i18next";
 
 let api: AxiosInstance;
 
@@ -12,9 +11,6 @@ export function createApi() {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-    },
-    params: {
-      locale: i18next.language || "en",
     },
   });
 
@@ -35,14 +31,13 @@ export function deleteToken() {
 }
 
 export function useApi() {
-  const { chainId } = useWeb3React();
   if (!api) {
     createApi();
   }
-  api.defaults.params.chainId = chainId;
+  api.defaults.params.chainId = window.ethereum.networkVersion;
   api.defaults.baseURL =
-    chainId == 1
-      ? "https://sahabanft.bluespace.ly/api" // mainnet
-      : "https://sahabanft.bluespace.ly/api"; // testnet
+    window.ethereum.networkVersion == 5
+      ? "https://sahabanft.bluespace.ly/api" // testnet
+      : "https://sahabanft.bluespace.ly/api"; // mainnet
   return api;
 }
