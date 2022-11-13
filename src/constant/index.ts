@@ -6,11 +6,12 @@ export const currentNetwork: string = "5";
 export const IPFS_BASE_URL: string = "https://ipfs.io/ipfs/";
 
 export const CONTRACT_ADDRESS: string =
-  "0x58F2D31dce49B586431c7BaFCA7E87151259B215";
+  "0x524F619312dcD8E82e0B43b56C74c8EdDFC2Ed64";
+export const TEST_CONTRACT_ADDRESS: string =
+  "0x524F619312dcD8E82e0B43b56C74c8EdDFC2Ed64";
 
 export const TEST_CONTRACT_LINK = `https://goerli.etherscan.io/address/${CONTRACT_ADDRESS}`;
 export const CONTRACT_ABI = abi;
-
 
 export const avatarColors = [
   "#ffdd00",

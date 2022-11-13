@@ -1,5 +1,5 @@
 import { useAppSelector } from "./../app/hooks";
-import { CONTRACT_ABI, CONTRACT_ADDRESS, currentNetwork } from "./../constant";
+import { currentNetwork } from "./../constant";
 import { toast } from "react-toastify";
 import { ethers, Contract, utils, BigNumber } from "ethers";
 import { networkParams } from "../services/networks";

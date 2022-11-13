@@ -4,9 +4,7 @@ import EmptyData from "components/EmptyData";
 import Labeled from "components/Labeled";
 import LoadingScreen from "components/LoadingScreen";
 import ServerError from "components/ServerError";
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from "constant";
-import { Contract } from "ethers";
-import { Dropdown, Table, Tabs } from "flowbite-react";
+import { Dropdown } from "flowbite-react";
 import { useApi } from "hooks/useApi";
 import { useCrud } from "hooks/useCrud";
 import React, { useEffect, useState } from "react";
@@ -21,6 +19,7 @@ import ReportsTable from "components/ReportsTable";
 import NftsTable from "components/NftsTable";
 import TransactionsTable from "components/TransactionsTable";
 import { getUserSlug } from "utils/functions";
+import useContract from "hooks/useContract";
 
 const RenderTabUserTransactions = (userData: UserData) => {
   const { fetch, loading, data, meta, errors } = useCrud(`/transactions`);
@@ -301,7 +300,8 @@ const UserDetails: React.FC = () => {
   const [changingStatusLoading, setChangingStatusLoading] = useState(false);
   const navigate = useNavigate();
   const [accountTotalBalance, setAccountTotalBalance] = useState(0);
-  const { library, active, account } = useWeb3React();
+  const { account } = useWeb3React();
+  const { contract } = useContract();
 
   useEffect(() => {
     if (!params.id) {
@@ -314,16 +314,9 @@ const UserDetails: React.FC = () => {
 
   const getAccountTotalBalance = async () => {
     try {
-      if (!active || !item) return;
-      const contract = new Contract(
-        CONTRACT_ADDRESS,
-        CONTRACT_ABI,
-        library?.getSigner()
-      );
+      if (!account || !item) return;
 
-      const balance = await contract.getTotalNumberOfTokensOwnedByAnAddress(
-        item.wallet_address
-      );
+      const balance = await contract.balanceOf(item.wallet_address);
       setAccountTotalBalance(+balance.toString());
     } catch (error: any) {
       console.log(error);
@@ -332,7 +325,7 @@ const UserDetails: React.FC = () => {
 
   useEffect(() => {
     getAccountTotalBalance();
-  }, [active, item, account]);
+  }, [item, account]);
 
   if (loading) {
     return <LoadingScreen />;

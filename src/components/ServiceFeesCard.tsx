@@ -1,7 +1,7 @@
 import { useWeb3React } from "@web3-react/core";
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from "constant";
-import { Contract, utils } from "ethers";
+import {  utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
+import useContract from "hooks/useContract";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
@@ -15,6 +15,8 @@ const ServiceFeesCard: React.FC = () => {
   const [updateServiceFeesLoading, setUpdateServiceFeesLoading] =
     React.useState<boolean>(false);
 
+  const { contract, isApprovedForAll, setApprovalForAll } = useContract();
+
   const [toggleUpdateServiceFee, setToggleUpdateServiceFee] =
     React.useState<boolean>(false);
 
@@ -23,12 +25,6 @@ const ServiceFeesCard: React.FC = () => {
       return;
     }
     try {
-      const contract = new Contract(
-        CONTRACT_ADDRESS,
-        CONTRACT_ABI,
-        library?.getSigner()
-      );
-
       const res = await contract.getServiceFeesPrice();
       setServiceFees(+utils.formatEther(res).toString());
       setNewServiceFees(+utils.formatEther(res).toString() * 100);
@@ -50,19 +46,8 @@ const ServiceFeesCard: React.FC = () => {
     setUpdateServiceFeesLoading(true);
 
     try {
-      const contract = new Contract(
-        CONTRACT_ADDRESS,
-        CONTRACT_ABI,
-        library?.getSigner()
-      );
-
-      const isApprovedForAll = await contract.isApprovedForAll(
-        account,
-        CONTRACT_ADDRESS
-      );
-
-      if (!isApprovedForAll) {
-        await contract.setApprovalForAll(CONTRACT_ADDRESS, true);
+      if (!isApprovedForAll()) {
+        await setApprovalForAll();
       }
 
       const tx = await contract.setServiceFeesPrice(
