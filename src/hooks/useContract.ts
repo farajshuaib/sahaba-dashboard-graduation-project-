@@ -12,14 +12,16 @@ export default function useContract() {
   const { chainId, library, account } = useWeb3React();
 
   const contract = useMemo(() => {
+    if (!chainId || !library || !account) return null;
     return new Contract(
       chainId == 1 ? CONTRACT_ADDRESS : TEST_CONTRACT_ADDRESS,
       CONTRACT_ABI,
-      library.getSigner()
+      library?.getSigner()
     );
   }, [chainId, library]);
 
   function isApprovedForAll() {
+    if (!contract) return;
     return contract.isApprovedForAll(
       account,
       chainId == 1 ? CONTRACT_ADDRESS : TEST_CONTRACT_ADDRESS
@@ -27,6 +29,7 @@ export default function useContract() {
   }
 
   function setApprovalForAll() {
+    if (!contract) return;
     return contract.setApprovalForAll(
       chainId == 1 ? CONTRACT_ADDRESS : TEST_CONTRACT_ADDRESS,
       true
