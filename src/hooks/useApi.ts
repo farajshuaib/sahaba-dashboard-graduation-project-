@@ -1,16 +1,17 @@
-import { useWeb3React } from "@web3-react/core";
+import { useWeb3React, getWeb3ReactContext } from "@web3-react/core";
 import axios, { AxiosInstance } from "axios";
 
 let api: AxiosInstance;
 
 export function createApi() {
   api = axios.create({
-    baseURL:
-      // "http://127.0.0.1:8000/api",
-      "https://sahabanft.bluespace.ly/api",
+    baseURL: "http://127.0.0.1:8000/api",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
+    },
+    params: {
+      locale: "en",
     },
   });
 
@@ -30,14 +31,21 @@ export function deleteToken() {
   delete api.defaults.headers.common.Authorization;
 }
 
-export function useApi() {
-  if (!api) {
-    createApi();
-  }
+function setChaidId() {
+  if (import.meta.env.MODE === "development") return;
   api.defaults.params.chainId = window.ethereum.networkVersion;
   api.defaults.baseURL =
     window.ethereum.networkVersion == 5
       ? "https://sahabanft.bluespace.ly/api" // testnet
       : "https://sahabanft.bluespace.ly/api"; // mainnet
+}
+
+export function useApi() {
+  if (!api) {
+    createApi();
+  }
+
+  setChaidId();
+
   return api;
 }
