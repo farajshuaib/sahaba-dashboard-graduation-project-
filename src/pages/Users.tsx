@@ -77,7 +77,7 @@ const Users: React.FC = () => {
                   key={index}
                   className="font-medium text-gray-800 whitespace-nowrap dark:text-white"
                 >
-                  <span>{`${item.toString() || "-"}`}</span>
+                  <span>{`${item || "-"}`}</span>
                 </Table.Cell>
               ))}
 

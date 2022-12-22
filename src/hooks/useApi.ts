@@ -5,7 +5,7 @@ let api: AxiosInstance;
 
 export function createApi() {
   api = axios.create({
-    baseURL: "http://127.0.0.1:8000/api",
+    baseURL: "http://api.sahabanft.com.ly/api",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -34,10 +34,6 @@ export function deleteToken() {
 function setChaidId() {
   if (import.meta.env.MODE === "development") return;
   api.defaults.params.chainId = window.ethereum.networkVersion;
-  api.defaults.baseURL =
-    window.ethereum.networkVersion == 5
-      ? "https://sahabanft.bluespace.ly/api" // testnet
-      : "https://sahabanft.bluespace.ly/api"; // mainnet
 }
 
 export function useApi() {
