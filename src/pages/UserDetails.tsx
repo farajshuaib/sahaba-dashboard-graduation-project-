@@ -120,7 +120,7 @@ const RenderKYCApplication = (userData: UserData) => {
   const changeKYCStatus = async (status: string) => {
     try {
       setChangeStatusLoading(true);
-      const { data } = await api.post(
+      const { data } = await api.put(
         `/kyc/change-account-status/${userData.kyc_form.id}`,
         { status }
       );
