@@ -150,7 +150,11 @@ interface Collection {
   max_price: number;
 }
 
-interface Collaborators extends UserData {}
+interface Collaborators  {
+  id: number;
+  created_at: Date;
+  user: UserData;
+}
 
 interface KycData {
   id: number;

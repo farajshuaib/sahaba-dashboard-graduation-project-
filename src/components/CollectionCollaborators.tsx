@@ -1,4 +1,5 @@
 import { Table } from "flowbite-react";
+import moment from "moment";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
@@ -11,12 +12,14 @@ interface Props {
 
 const CollectionCollaborators: React.FC<Props> = ({ collaborators }) => {
   const navigate = useNavigate();
+  console.log(collaborators);
   return (
     <div>
       <Table>
         <Table.Head>
           {[
             "id",
+            "user id",
             "first name",
             "last name",
             "username",
@@ -26,6 +29,7 @@ const CollectionCollaborators: React.FC<Props> = ({ collaborators }) => {
             "created nfts count",
             "owned nfts count",
             "is subscribed",
+            "created at",
             "actions",
           ].map((item, index) => (
             <Table.HeadCell key={index} className="whitespace-nowrap">
@@ -34,12 +38,13 @@ const CollectionCollaborators: React.FC<Props> = ({ collaborators }) => {
           ))}
         </Table.Head>
         <Table.Body className="divide-y">
-          {collaborators.map((user: Collaborators, index: number) => (
+          {collaborators.map(({ id, user, created_at }, index: number) => (
             <Table.Row
               key={index}
               className="bg-white dark:border-gray-700 dark:bg-gray-800"
             >
               {[
+                id,
                 user.id,
                 user.first_name || "-",
                 user.last_name || "-",
@@ -50,6 +55,7 @@ const CollectionCollaborators: React.FC<Props> = ({ collaborators }) => {
                 user.created_nfts_count || "-",
                 user.owned_nfts_count || "-",
                 user.is_subscribed ? "yes" : "no",
+                moment(created_at).format("DD/MM/YYYY HH:MM") || "-",
               ].map((item, index) => (
                 <Table.Cell
                   key={index}
