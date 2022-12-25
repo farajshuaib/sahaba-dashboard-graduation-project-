@@ -1,4 +1,3 @@
-import { useWeb3React, getWeb3ReactContext } from "@web3-react/core";
 import axios, { AxiosInstance } from "axios";
 
 let api: AxiosInstance;

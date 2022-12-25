@@ -35,25 +35,25 @@ const TransactionsTable: React.FC<props> = ({ transactions }) => {
                 {transaction.id}
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
-                <NavLink to={`/user/${transaction.from.id}`} className="link">
-                  <span>{getUserSlug(transaction.from)}</span>
+                <NavLink to={`/user/${transaction.from?.id}`} className="link">
+                  <span>{getUserSlug(transaction?.from)}</span>
                 </NavLink>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
-                <NavLink to={`/user/${transaction.to.id}`} className="link">
-                  <span>{getUserSlug(transaction.to)}</span>
+                <NavLink to={`/user/${transaction?.to?.id}`} className="link">
+                  <span>{getUserSlug(transaction?.to)}</span>
                 </NavLink>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
-                <NavLink to={`/nft/${transaction.nft.id}`} className="link">
-                  <span>{transaction.nft.title}</span>
+                <NavLink to={`/nft/${transaction?.nft?.id || ""}`} className="link">
+                  <span>{transaction?.nft?.title || "-"}</span>
                 </NavLink>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
                 <span>{transaction.type}</span>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
-                <span>{transaction.price}</span>
+                <span>{transaction.price + " ETH"}</span>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
                 <span>
