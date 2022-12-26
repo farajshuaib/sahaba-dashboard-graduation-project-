@@ -24,8 +24,16 @@ export const isLoggedIn = createAsyncThunk(
   "users/login",
   async (_, thunkAPI) => {
     try {
-      const response = await api.get("/me");
-      return thunkAPI.fulfillWithValue(response.data);
+      const { data } = await api.get("/me");
+      if (
+        data?.user &&
+        data.user.roles.some(
+          (role: any) => role.name === "admin" || role.name === "super-admin"
+        )
+      ) {
+        return thunkAPI.fulfillWithValue(data);
+      }
+      return thunkAPI.rejectWithValue({ data: { message: "Unauthorized" } });
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response);
     }
