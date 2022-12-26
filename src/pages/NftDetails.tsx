@@ -81,7 +81,7 @@ const RenderNftsReports: React.FC = () => {
 
   useEffect(() => {
     fetch({ page, reportable: "NFT" });
-  }, []);
+  }, [page]);
 
   if (loading) {
     return <LoadingScreen />;

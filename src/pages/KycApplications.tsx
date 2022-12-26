@@ -20,7 +20,7 @@ const KycApplications: React.FC = () => {
 
   useEffect(() => {
     fetch({ page });
-  }, []);
+  }, [page]);
 
   if (loading) {
     return <LoadingScreen />;

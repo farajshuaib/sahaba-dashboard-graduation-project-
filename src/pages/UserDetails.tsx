@@ -212,7 +212,7 @@ const RenderOwnedNfts: React.FC = () => {
 
   useEffect(() => {
     fetch({ page });
-  }, []);
+  }, [page]);
 
   if (loading) {
     return <LoadingScreen />;
@@ -243,7 +243,7 @@ const RenderCreatedNfts: React.FC = () => {
 
   useEffect(() => {
     fetch({ page });
-  }, []);
+  }, [page]);
 
   if (loading) {
     return <LoadingScreen />;
@@ -271,7 +271,7 @@ const RenderUserReports: React.FC = () => {
 
   useEffect(() => {
     fetch({ page, reportable: "User" });
-  }, []);
+  }, [page]);
 
   if (loading) {
     return <LoadingScreen />;

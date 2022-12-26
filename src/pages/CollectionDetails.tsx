@@ -65,7 +65,7 @@ const RenderCollectionNfts: React.FC = () => {
 
   useEffect(() => {
     fetch({ page });
-  }, []);
+  }, [page]);
 
   if (loading) {
     return <LoadingScreen />;
@@ -93,7 +93,7 @@ const RenderCollectionReports: React.FC = () => {
 
   useEffect(() => {
     fetch({ page, reportable: "Collection" });
-  }, []);
+  }, [page]);
 
   if (loading) {
     return <LoadingScreen />;
