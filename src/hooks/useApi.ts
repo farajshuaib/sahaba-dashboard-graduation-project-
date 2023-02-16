@@ -10,7 +10,7 @@ export function createApi() {
       Accept: "application/json",
     },
     params: {
-      locale: "en",
+      locale: "ar",
     },
   });
 
@@ -32,7 +32,7 @@ export function deleteToken() {
 
 function setChaidId() {
   if (import.meta.env.MODE === "development") return;
-  api.defaults.params.chainId = window.ethereum.networkVersion;
+  api.defaults.params.chainId = window?.ethereum ? window?.ethereum?.networkVersion || 5 : 5;
 }
 
 export function useApi() {
