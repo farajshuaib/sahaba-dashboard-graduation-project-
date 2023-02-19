@@ -20,7 +20,7 @@ interface nav {
 }
 
 const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const web3React = useWeb3React();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -157,6 +157,11 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
             </Popover.Panel>
           </Transition>
         </Popover>
+        <button onClick={() => {
+          i18n.changeLanguage(i18n.language === "en" ? "ar" : "en")
+        }}>
+          <i className="bx bx-world text-2xl text-gray-700"></i>
+        </button>
       </div>
     </nav>
   );
