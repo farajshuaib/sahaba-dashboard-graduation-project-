@@ -9,8 +9,10 @@ import { useApi } from "hooks/useApi";
 import Input from "shared/Input/Input";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import { Alert } from "shared/Alert/Alert";
+import { useTranslation } from "react-i18next";
 
 const ResetPassword: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const api = useApi();
   const [error, setError] = useState<string>("");
   const [passwordVisible, setPasswordVisible] = useState<string>("password");
@@ -44,14 +46,16 @@ const ResetPassword: React.FC = () => {
             });
             if (data) {
               setSubmitting(false);
-              toast.success("Password reset successfully");
+              toast.success(t("password-reset-successfully"));
               navigate("/login");
             }
           } catch (err: any) {
             if (err.response.data.error) {
               setError(err.response.data.error);
             } else {
-              setError("something went wrong please try again later");
+              setError(
+                t("something-went-wrong-please-try-again-later") as string
+              );
             }
             setSubmitting(false);
           }
@@ -77,10 +81,10 @@ const ResetPassword: React.FC = () => {
               />
               <Form onSubmit={handleSubmit}>
                 <h1 className="text-2xl text-gray800 my-5">
-                  create new password
+                  {t("create-new-password")}
                 </h1>
                 <div className="my-5">
-                  <label htmlFor="password">new password</label>
+                  <label htmlFor="password">{t("new-password")}</label>
                   <div className="flex items-center">
                     <Input
                       type={passwordVisible}
@@ -111,7 +115,7 @@ const ResetPassword: React.FC = () => {
                 </div>
                 <div className="my-5">
                   <label htmlFor="password_confirmation">
-                    rewrite password
+                    {t("rewrite-password")}
                   </label>
                   <Input
                     type="password"
@@ -135,7 +139,7 @@ const ResetPassword: React.FC = () => {
                 {!!error && <Alert type="error">{error}</Alert>}
 
                 <ButtonPrimary onClick={handleSubmit} loading={isSubmitting}>
-                  Submit
+                  {t("submit")}
                 </ButtonPrimary>
               </Form>
             </div>

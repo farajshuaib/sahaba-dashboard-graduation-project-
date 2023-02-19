@@ -1,6 +1,7 @@
 import { Table } from "flowbite-react";
 import moment from "moment";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate } from "react-router-dom";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
 import { getUserSlug } from "utils/functions";
@@ -11,24 +12,26 @@ interface Props {
 
 const NftsTable: React.FC<Props> = ({ nfts }) => {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+
   return (
     <div>
       <Table>
         <Table.Head>
           {[
             "id",
-            "token id",
-            "title",
-            "price",
-            "is for sale",
-            "likes",
-            "watches",
-            "created at",
-            "collection",
-            "creator",
-            "owner",
-            "file",
-            "action",
+            t('token-id'),
+            t('title'),
+            t('price'),
+            t('is-for-sale'),
+            t('likes'),
+            t('watches'),
+            t('created-at'),
+            t('collection'),
+            t('creator'),
+            t('owner'),
+            t('file'),
+            t('action'),
           ].map((key, index) => (
             <Table.HeadCell className="whitespace-nowrap" key={index}>
               {key}
@@ -55,7 +58,7 @@ const NftsTable: React.FC<Props> = ({ nfts }) => {
                   key={innerIndex}
                   className="font-medium text-gray-800 whitespace-nowrap dark:text-white"
                 >
-                  {`${val != null ? val : "unknown"}`}
+                  {`${val != null ? val : t('unknown')}`}
                 </Table.Cell>
               ))}
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
@@ -80,12 +83,12 @@ const NftsTable: React.FC<Props> = ({ nfts }) => {
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
                 <a href={nft?.file_path} target="_blank" className="link">
                   <i className="bx bx-image-alt"></i>
-                  <span>preview</span>
+                  <span>{t('preview-0')}</span>
                 </a>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
                 <ButtonSecondary onClick={() => navigate(`/nft/${nft.id}`)}>
-                  show details
+                  {t('show-details')}
                 </ButtonSecondary>
               </Table.Cell>
             </Table.Row>

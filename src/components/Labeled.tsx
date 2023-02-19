@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface props {
   title: string;
@@ -8,6 +9,7 @@ interface props {
 }
 
 const Labeled: React.FC<props> = ({ title, value, preview, previewTitle }) => {
+  const { t } = useTranslation();
   return (
     <div className="">
       <label htmlFor={title} className="text-xl text-gray700">
@@ -20,11 +22,11 @@ const Labeled: React.FC<props> = ({ title, value, preview, previewTitle }) => {
           href={value}
           className="block my-2 text-xl text-blue-500"
         >
-          {previewTitle || "Preview"}
+          {previewTitle || t('preview')}
         </a>
       ) : (
         <h4 id={title} className="my-2 text-xl truncate">
-          {`${value}` || "unknown"}
+          {`${value}` || t('unknown')}
         </h4>
       )}
     </div>

@@ -1,5 +1,6 @@
 import { Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate } from "react-router-dom";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
 import { getUserSlug } from "utils/functions";
@@ -14,6 +15,7 @@ const Collections: React.FC = () => {
   const { fetch, loading, data, meta, errors } = useCrud("/collections");
   const [page, setPage] = useState<number>(1);
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     fetch({ page });
@@ -33,27 +35,27 @@ const Collections: React.FC = () => {
 
   return (
     <div>
-      <Heading desc="">Collections</Heading>
+      <Heading desc="">{t("collections")}</Heading>
 
       <Table>
         <Table.Head>
           {[
             "id",
-            "name",
-            "CATEGORY",
-            "CREATED BY",
-            "IS SENSITIVE CONTENT",
-            "number of NFTS",
-            "VOLUME",
-            "MIN PRICE",
-            "MAX PRICE",
-            "logo image",
-            "website",
-            "twitter",
-            "facebook",
-            "telegram",
-            "instagram",
-            "action",
+            t("name"),
+            t("category"),
+            t("created-by"),
+            t("is-sensitive-content"),
+            t("number-of-nfts-1"),
+            t("volume"),
+            t("min-price"),
+            t("max-price"),
+            t("logo-image"),
+            t("website"),
+            t("twitter"),
+            t("facebook"),
+            t("telegram"),
+            t("instagram"),
+            t("action"),
           ].map((key, index) => (
             <Table.HeadCell className="whitespace-nowrap" key={index}>
               {key}
@@ -71,7 +73,7 @@ const Collections: React.FC = () => {
                 collection.name,
                 collection.category.name,
                 getUserSlug(collection.created_by),
-                collection.is_sensitive_content ? "yes" : "no",
+                collection.is_sensitive_content ? t("yes") : t("no"),
                 collection.nfts_count,
                 collection.volume,
                 collection.min_price,
@@ -107,7 +109,7 @@ const Collections: React.FC = () => {
                 >
                   {item ? (
                     <a href={item} target="_blank" className="link">
-                      <span>preview</span>
+                      <span>{t('preview-0')}</span>
                     </a>
                   ) : (
                     "-"
@@ -118,7 +120,7 @@ const Collections: React.FC = () => {
                 <ButtonSecondary
                   onClick={() => navigate(`/collection/${collection.id}`)}
                 >
-                  show details
+                  {t("show-details")}
                 </ButtonSecondary>
               </Table.Cell>
             </Table.Row>

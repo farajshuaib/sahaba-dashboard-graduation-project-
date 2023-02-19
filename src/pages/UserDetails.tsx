@@ -20,10 +20,12 @@ import NftsTable from "components/NftsTable";
 import TransactionsTable from "components/TransactionsTable";
 import { getUserSlug } from "utils/functions";
 import useContract from "hooks/useContract";
+import { useTranslation } from "react-i18next";
 
 const RenderTabUserTransactions = (userData: UserData) => {
   const { fetch, loading, data, meta, errors } = useCrud(`/transactions`);
   const [page, setPage] = useState<number>(1);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     fetch({ page, from: userData?.id });
@@ -49,73 +51,86 @@ const RenderTabUserTransactions = (userData: UserData) => {
   );
 };
 
-const _renderTabUserDetails = (userData: UserData) => (
-  <section className="my-8">
-    <Labeled title="Wallet address" value={userData?.wallet_address} />
-    <div className="grid grid-cols-2 gap-5 my-8 md:grid-cols-2">
-      <Labeled title="First name" value={userData?.first_name} />
-      <Labeled title="Last name" value={userData?.last_name} />
-      <Labeled title="Banner photo" preview value={userData?.banner_photo} />
-      <Labeled title="Profile photo" preview value={userData?.profile_photo} />
-      <Labeled title="Username" value={userData?.username} />
-      <Labeled title="Email" value={userData?.email} />
-      <Labeled
-        title="Number of owned NFTs"
-        value={`${+userData?.owned_nfts_count}`}
-      />
-      <Labeled
-        title="Number of created NFTs"
-        value={`${+userData?.created_nfts_count}`}
-      />
-      <Labeled
-        title="Number of created NFTs"
-        value={`${+userData?.created_nfts_count}`}
-      />
-      <Labeled
-        title="Number of created collections"
-        value={`${+userData?.collections_count}`}
-      />
-      <Labeled
-        title="Number of followers"
-        value={`${+userData?.followers_count}`}
-      />
-      <Labeled
-        title="Number of followings"
-        value={`${+userData?.followings_count}`}
-      />
-      <Labeled
-        preview
-        title="Facebook page"
-        value={`${userData?.social_links?.facebook_url}`}
-      />
-      <Labeled
-        preview
-        title="Twitter page"
-        value={`${userData?.social_links?.twitter_url}`}
-      />
-      <Labeled
-        preview
-        title="Telegram page"
-        value={`${userData?.social_links?.telegram_url}`}
-      />
-      <Labeled
-        title="Website page"
-        preview
-        value={`${userData?.social_links?.website_url}`}
-      />
-      <Labeled
-        title="Instagram page"
-        preview
-        value={`${userData?.social_links?.instagram_url}`}
-      />
-    </div>
-  </section>
-);
+const RenderTabUserDetails = (userData: UserData) => {
+  const { t, i18n } = useTranslation();
+
+  return (
+    <section className="my-8">
+      <Labeled title="Wallet address" value={userData?.wallet_address} />
+      <div className="grid grid-cols-2 gap-5 my-8 md:grid-cols-2">
+        <Labeled title={t("first-name")} value={userData?.first_name} />
+        <Labeled title={t("last-name")} value={userData?.last_name} />
+        <Labeled
+          title={t("banner-photo")}
+          preview
+          value={userData?.banner_photo}
+        />
+        <Labeled
+          title={t("profile-photo")}
+          preview
+          value={userData?.profile_photo}
+        />
+        <Labeled title={t("username")} value={userData?.username} />
+        <Labeled title={t("email")} value={userData?.email} />
+        <Labeled
+          title={t("number-of-owned-nfts")}
+          value={`${+userData?.owned_nfts_count}`}
+        />
+        <Labeled
+          title={t("number-of-created-nfts")}
+          value={`${+userData?.created_nfts_count}`}
+        />
+        <Labeled
+          title={t("number-of-created-nfts")}
+          value={`${+userData?.created_nfts_count}`}
+        />
+        <Labeled
+          title={t("number-of-created-collections")}
+          value={`${+userData?.collections_count}`}
+        />
+        <Labeled
+          title={t("number-of-followers")}
+          value={`${+userData?.followers_count}`}
+        />
+        <Labeled
+          title={t("number-of-followings")}
+          value={`${+userData?.followings_count}`}
+        />
+        <Labeled
+          preview
+          title={t("facebook-page")}
+          value={`${userData?.social_links?.facebook_url}`}
+        />
+        <Labeled
+          preview
+          title={t("twitter-page")}
+          value={`${userData?.social_links?.twitter_url}`}
+        />
+        <Labeled
+          preview
+          title={t("telegram-page")}
+          value={`${userData?.social_links?.telegram_url}`}
+        />
+        <Labeled
+          title={t("website-page")}
+          preview
+          value={`${userData?.social_links?.website_url}`}
+        />
+        <Labeled
+          title={t("instagram-page")}
+          preview
+          value={`${userData?.social_links?.instagram_url}`}
+        />
+      </div>
+    </section>
+  );
+};
 
 const RenderKYCApplication = (userData: UserData) => {
   const api = useApi();
   const [changeStatusLoading, setChangeStatusLoading] =
     useState<boolean>(false);
+  const { t, i18n } = useTranslation();
 
   const changeKYCStatus = async (status: string) => {
     try {
@@ -128,7 +143,7 @@ const RenderKYCApplication = (userData: UserData) => {
       setChangeStatusLoading(false);
     } catch (error: any) {
       setChangeStatusLoading(false);
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message || t("something-went-wrong"));
     }
   };
 
@@ -154,44 +169,53 @@ const RenderKYCApplication = (userData: UserData) => {
           </section>
           <section className="grid grid-cols-2 gap-5 my-8 md:grid-cols-2">
             <Labeled
-              title="Account type"
+              title={t("account-type")}
               value={userData?.kyc_form?.author_type}
             />
             <Labeled
-              title="Author art type"
+              title={t("author-art-type")}
               value={userData?.kyc_form?.author_art_type}
             />
             <Labeled
-              title="Phone number"
+              title={t("phone-number")}
               value={userData?.kyc_form?.phone_number}
             />
-            <Labeled title="Gender" value={userData?.kyc_form?.gender} />
-            <Labeled title="Country" value={userData?.kyc_form?.country} />
-            <Labeled title="City" value={userData?.kyc_form?.city} />
-            <Labeled title="Address" value={userData?.kyc_form?.address} />
+            <Labeled title={t("gender")} value={userData?.kyc_form?.gender} />
             <Labeled
-              title="Passport id"
+              title={t("country")}
+              value={userData?.kyc_form?.country}
+            />
+            <Labeled title={t("city")} value={userData?.kyc_form?.city} />
+            <Labeled
+              title={t("address")}
+              value={userData?.kyc_form?.address}
+            />
+            <Labeled
+              title={t("passport-id")}
               preview
               value={userData?.kyc_form?.passport_id}
             />
 
-            <Labeled title="Address" value={userData?.kyc_form?.passport_id} />
+            <Labeled
+              title={t("address")}
+              value={userData?.kyc_form?.passport_id}
+            />
           </section>
           <section className="flex  my-5 gap-5 justify-end">
             <Dropdown
-              label={changeStatusLoading ? "loading..." : "change status"}
+              label={changeStatusLoading ? t("loading") : t("change-status")}
             >
               <Dropdown.Item onClick={() => changeKYCStatus("approved")}>
-                approved
+                {t("approved")}
               </Dropdown.Item>
               <Dropdown.Item onClick={() => changeKYCStatus("rejected")}>
-                rejected
+                {t("rejected")}
               </Dropdown.Item>
               <Dropdown.Item onClick={() => changeKYCStatus("pending")}>
-                pending
+                {t("pending")}
               </Dropdown.Item>
               <Dropdown.Item onClick={() => changeKYCStatus("on_review")}>
-                on_review
+                {t("on_review")}
               </Dropdown.Item>
             </Dropdown>
           </section>
@@ -240,6 +264,7 @@ const RenderCreatedNfts: React.FC = () => {
     `/nfts?creator=${params.id}`
   );
   const [page, setPage] = useState<number>(1);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     fetch({ page });
@@ -302,11 +327,12 @@ const UserDetails: React.FC = () => {
   const [accountTotalBalance, setAccountTotalBalance] = useState(0);
   const { account } = useWeb3React();
   const { contract } = useContract();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     if (!params.id) {
       navigate("/users");
-      toast.warn("user not found...");
+      toast.warn(t("user-not-found"));
       return;
     }
     fetchById(params.id);
@@ -356,7 +382,7 @@ const UserDetails: React.FC = () => {
     if (!item) return <></>;
     switch (tab) {
       case "Info":
-        return _renderTabUserDetails(item);
+        return <RenderTabUserDetails {...item} />;
       case "Transactions":
         return <RenderTabUserTransactions {...item} />;
       case "KYC Application":
@@ -384,12 +410,12 @@ const UserDetails: React.FC = () => {
       <p className="my-3">{userData?.bio}</p>
       <div className="flex flex-wrap items-center gap-3 my-2">
         <Badge
-          name={`Account: ${userData?.status}`}
+          name={`${t("account")}: ${userData?.status}`}
           color={userData?.status == "active" ? "green" : "red"}
         />
         <Badge
-          name={`Email: ${
-            userData?.email_verified_at ? "verified" : "not verified"
+          name={`${t("email-1")}: ${
+            userData?.email_verified_at ? t("verified") : t("not-verified")
           }`}
           color={userData?.email_verified_at ? "green" : "red"}
         />
@@ -413,27 +439,27 @@ const UserDetails: React.FC = () => {
 
   const _renderAccountBalance = () => (
     <div className="flex items-center gap-4 p-5 text-white rounded-lg bg-primary-700">
-      <img src={logo_light} alt="sahaba" className="h-24" />
+      <img src={logo_light} alt="Sahaba" className="h-24" />
       <div className="">
-        <h5 className="text-xl font-medium uppercase">total balance</h5>
+        <h5 className="text-xl font-medium uppercase">{t("total-balance")}</h5>
         <span>{accountTotalBalance} NFTs</span>
       </div>
     </div>
   );
 
   const Tabs = [
-    "Info",
-    "KYC Application",
-    "Transactions",
-    "Reports",
-    "Created NFTs",
-    "Owned NFTs",
+    { key: "Info", val: t("info") },
+    { key: "KYC Application", val: t("kyc-application") },
+    { key: "Transactions", val: t("transactions") },
+    { key: "Reports", val: t("reports") },
+    { key: "Created NFTs", val: t("created-nfts") },
+    { key: "Owned NFTs", val: t("owned-nfts") },
   ];
 
   return (
     <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
       <section className="col-span-8 p-4 bg-white rounded-lg shadow-sm">
-        <Heading desc="">User Details</Heading>
+        <Heading desc="">{t("user-details")}</Heading>
         <div className="flex justify-end my-5">
           <button
             onClick={toggleAccountStatus}
@@ -446,8 +472,8 @@ const UserDetails: React.FC = () => {
             ) : (
               <span>
                 {item.status == "active"
-                  ? "Suspend account"
-                  : "Activate account"}
+                  ? t("suspend-account")
+                  : t("activate-account")}
               </span>
             )}
           </button>
@@ -456,7 +482,7 @@ const UserDetails: React.FC = () => {
           <Tab.List className="flex justify-start gap-3 overflow-scroll rounded-full pd-1">
             {Tabs.map((tab) => (
               <Tab
-                key={tab}
+                key={tab.key}
                 className={({ selected }) =>
                   `px-3.5 whitespace-nowrap sm:px-8 py-1.5 sm:py-2 text-xs sm:text-sm leading-5 font-medium rounded-full focus:outline-none focus:ring-2 ring-primary-300 ${
                     selected
@@ -465,7 +491,7 @@ const UserDetails: React.FC = () => {
                   }`
                 }
               >
-                {tab}
+                {tab.val}
               </Tab>
             ))}
           </Tab.List>
@@ -477,7 +503,7 @@ const UserDetails: React.FC = () => {
                   "rounded-xl focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60 "
                 }
               >
-                {renderTabItem(tab)}
+                {renderTabItem(tab.key)}
               </Tab.Panel>
             ))}
           </Tab.Panels>

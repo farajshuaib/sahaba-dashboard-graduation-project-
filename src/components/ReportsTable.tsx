@@ -1,6 +1,7 @@
 import { Table } from "flowbite-react";
 import moment from "moment";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate } from "react-router-dom";
 import { getUserSlug } from "utils/functions";
 import EmptyData from "./EmptyData";
@@ -11,6 +12,7 @@ interface Props {
 
 const ReportsTable: React.FC<Props> = ({ reports }) => {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   if (reports.length == 0) {
     return <EmptyData />;
@@ -20,13 +22,18 @@ const ReportsTable: React.FC<Props> = ({ reports }) => {
     <div>
       <Table>
         <Table.Head>
-          {["id", "reportable", "type", "message", "date", "reporter"].map(
-            (item, index) => (
-              <Table.HeadCell key={index} className="whitespace-nowrap">
-                {item}
-              </Table.HeadCell>
-            )
-          )}
+          {[
+            "id",
+            t("reportable"),
+            t("type"),
+            t("message"),
+            t("date"),
+            t("reporter"),
+          ].map((item, index) => (
+            <Table.HeadCell key={index} className="whitespace-nowrap">
+              {item}
+            </Table.HeadCell>
+          ))}
         </Table.Head>
         <Table.Body className="divide-y">
           {reports.map((report: Reports, index: number) => (

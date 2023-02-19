@@ -6,6 +6,7 @@ import { ErrorMessage, Formik } from "formik";
 import { useApi } from "hooks/useApi";
 import { useCrud } from "hooks/useCrud";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
@@ -19,6 +20,7 @@ const Subscribers: React.FC = () => {
   const { fetch, loading, data, errors, meta } = useCrud(`/subscribers`);
   const [page, setPage] = useState<number>(1);
   const [toggleModel, setToggleModel] = useState<boolean>(false);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     fetch();
@@ -32,22 +34,22 @@ const Subscribers: React.FC = () => {
     return <ServerError />;
   }
 
-  if(data.length === 0) {
-    return <EmptyData />
+  if (data.length === 0) {
+    return <EmptyData />;
   }
 
   return (
     <div>
-      <Heading desc="all subscribers users">Subscribers</Heading>
+      <Heading desc="all subscribers users">{t('subscribers')}</Heading>
 
       <div className="flex justify-end my-8">
         <ButtonPrimary onClick={() => setToggleModel(true)}>
-          send email
+          {t("send-email")}
         </ButtonPrimary>
       </div>
       <Table>
         <Table.Head>
-          {["id", "email"].map((item, index) => (
+          {["id", t("email")].map((item, index) => (
             <Table.HeadCell key={index} className="whitespace-nowrap">
               {item}
             </Table.HeadCell>
@@ -83,11 +85,11 @@ const Subscribers: React.FC = () => {
                 values
               );
               console.log(response);
-              toast.success("email sent successfully");
+              toast.success(t("email-sent-successfully"));
               setToggleModel(false);
             } catch (error: any) {
               toast.error(
-                error?.response?.data?.message || "something went wrong"
+                error?.response?.data?.message || t("something-went-wrong-1")
               );
             }
           }}
@@ -102,13 +104,13 @@ const Subscribers: React.FC = () => {
           }) => (
             <>
               <Modal.Header>
-                <h1>Send email</h1>
+                <h1>{t("send-email")}</h1>
               </Modal.Header>
 
               <Modal.Body>
                 <div className="my-5">
                   <label className="font-medium text-lg" htmlFor="subject">
-                    subject
+                    {t("subject")}
                   </label>
                   <Input
                     id="subject"
@@ -128,7 +130,7 @@ const Subscribers: React.FC = () => {
                 </div>
                 <div className="my-5">
                   <label className="font-medium text-lg" htmlFor="message">
-                    message
+                    {t("message")}
                   </label>
                   <Textarea
                     id="message"
@@ -149,7 +151,7 @@ const Subscribers: React.FC = () => {
 
               <Modal.Footer>
                 <ButtonPrimary loading={isSubmitting} onClick={handleSubmit}>
-                  send
+                  {t("send")}
                 </ButtonPrimary>
                 <ButtonSecondary
                   onClick={() => {
@@ -157,8 +159,7 @@ const Subscribers: React.FC = () => {
                     setToggleModel(false);
                   }}
                 >
-                  {" "}
-                  cancel
+                  {t("cancel")}
                 </ButtonSecondary>
               </Modal.Footer>
             </>

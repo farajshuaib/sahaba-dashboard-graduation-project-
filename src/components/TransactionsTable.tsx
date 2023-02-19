@@ -1,6 +1,7 @@
 import { Table } from "flowbite-react";
 import moment from "moment";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import { getUserSlug } from "utils/functions";
 
@@ -9,18 +10,19 @@ interface props {
 }
 
 const TransactionsTable: React.FC<props> = ({ transactions }) => {
+  const { t, i18n } = useTranslation();
   return (
     <div>
       <Table>
         <Table.Head>
           {[
             "id",
-            "from user",
-            "to user",
-            "nft",
-            "type",
-            "price",
-            "created at",
+            t('from-user'),
+            t('to-user'),
+            t('nft'),
+            t('type'),
+            t('price'),
+            t('created-at'),
           ].map((key, index) => (
             <Table.HeadCell key={index}>{key}</Table.HeadCell>
           ))}

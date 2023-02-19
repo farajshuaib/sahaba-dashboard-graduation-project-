@@ -1,6 +1,7 @@
 import { Dropdown, Table } from "flowbite-react";
 import { useApi } from "hooks/useApi";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import Badge from "shared/Badge/Badge";
@@ -14,6 +15,7 @@ import Heading from "../shared/Heading/Heading";
 import Pagination from "../shared/Pagination/Pagination";
 
 const KycApplications: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const { fetch, loading, data, meta, errors } = useCrud("/kyc");
   const [page, setPage] = useState<number>(1);
   const api = useApi();
@@ -36,22 +38,22 @@ const KycApplications: React.FC = () => {
 
   return (
     <div>
-      <Heading desc="">KYC Applications</Heading>
+      <Heading desc="">{t('kyc-applications')}</Heading>
 
       <Table>
         <Table.Head>
           {[
             "id",
-            "user",
-            "gender",
-            "country",
-            "city",
-            "address",
-            "phone number",
-            "author type",
-            "art type",
-            "passport id",
-            "status",
+            t('user'),
+            t('gender'),
+            t('country'),
+            t('city'),
+            t('address'),
+            t('phone-number'),
+            t('author-type'),
+            t('art-type'),
+            t('passport-id'),
+            t('status'),
           ].map((key, index) => (
             <Table.HeadCell className="whitespace-nowrap" key={index}>{key}</Table.HeadCell>
           ))}
@@ -93,7 +95,7 @@ const KycApplications: React.FC = () => {
                   className="link"
                 >
                   <i className="bx bx-image-alt"></i>
-                  <span>preview</span>
+                  <span>{t('preview-0')}</span>
                 </a>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">

@@ -8,60 +8,75 @@ import ReportsTable from "components/ReportsTable";
 import ServerError from "components/ServerError";
 import { useCrud } from "hooks/useCrud";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Heading from "shared/Heading/Heading";
 import Pagination from "shared/Pagination/Pagination";
 import { getUserSlug } from "utils/functions";
 
-const _renderTabCollectionDetails = (collection: Collection) => (
-  <section className="grid grid-cols-2 gap-5 my-8 md:grid-cols-2 ">
-    <Labeled title="name" value={collection?.name} />
-    <Labeled title="category" value={collection?.category.name} />
-    <Labeled
-      title="is sensitive content"
-      value={collection?.is_sensitive_content ? "yes" : "nol"}
-    />
-    <Labeled title="max price" value={`${collection?.max_price}`} />
-    <Labeled title="min price" value={`${collection?.min_price}`} />
-    <Labeled title="volume" value={`${collection?.volume}`} />
-    <Labeled title="number of NFTs" value={`${collection?.nfts_count}`} />
-    <Labeled title="created by" value={getUserSlug(collection?.created_by)} />
-    <Labeled preview title="logo image" value={collection?.logo_image} />
-    <Labeled
-      preview
-      title="website"
-      value={collection?.social_links?.website_url}
-    />
-    <Labeled
-      preview
-      title="twitter"
-      value={collection?.social_links?.twitter_url}
-    />
-    <Labeled
-      preview
-      title="facebook"
-      value={collection?.social_links?.facebook_url}
-    />
-    <Labeled
-      preview
-      title="telegram"
-      value={collection?.social_links?.telegram_url}
-    />
-    <Labeled
-      preview
-      title="instagram"
-      value={collection?.social_links?.instagram_url}
-    />
-  </section>
-);
+const _renderTabCollectionDetails = (collection: Collection) => {
+  const { t, i18n } = useTranslation();
 
+  return (
+    <section className="grid grid-cols-2 gap-5 my-8 md:grid-cols-2 ">
+      <Labeled title={t("name")} value={collection?.name} />
+      <Labeled title={t("category")} value={collection?.category.name} />
+      <Labeled
+        title={t("is-sensitive-content")}
+        value={
+          collection?.is_sensitive_content
+            ? (t("yes") as string)
+            : (t("no") as string)
+        }
+      />
+      <Labeled title={t("max-price")} value={`${collection?.max_price}`} />
+      <Labeled title={t("min-price")} value={`${collection?.min_price}`} />
+      <Labeled title={t("volume")} value={`${collection?.volume}`} />
+      <Labeled
+        title={t("number-of-nfts")}
+        value={`${collection?.nfts_count}`}
+      />
+      <Labeled
+        title={t("created-by")}
+        value={getUserSlug(collection?.created_by)}
+      />
+      <Labeled preview title={t("logo-image")} value={collection?.logo_image} />
+      <Labeled
+        preview
+        title={t("website")}
+        value={collection?.social_links?.website_url}
+      />
+      <Labeled
+        preview
+        title={t("twitter")}
+        value={collection?.social_links?.twitter_url}
+      />
+      <Labeled
+        preview
+        title={t("facebook")}
+        value={collection?.social_links?.facebook_url}
+      />
+      <Labeled
+        preview
+        title={t("telegram")}
+        value={collection?.social_links?.telegram_url}
+      />
+      <Labeled
+        preview
+        title={t("instagram")}
+        value={collection?.social_links?.instagram_url}
+      />
+    </section>
+  );
+};
 const RenderCollectionNfts: React.FC = () => {
   const params = useParams();
   const { data, fetch, loading, errors, meta } = useCrud(
     `/nfts?collection=${params.id}`
   );
   const [page, setPage] = useState<number>(1);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     fetch({ page });
@@ -90,6 +105,7 @@ const RenderCollectionNfts: React.FC = () => {
 const RenderCollectionReports: React.FC = () => {
   const { data, loading, fetch, errors, meta } = useCrud(`/reports`);
   const [page, setPage] = useState<number>(1);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     fetch({ page, reportable: "Collection" });
@@ -118,13 +134,13 @@ const RenderCollectionReports: React.FC = () => {
 const CollectionDetails: React.FC = () => {
   const params = useParams();
   const { fetchById, loading, item, errors } = useCrud(`/collections`);
-
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!params.id) {
       navigate("/collections");
-      toast.warn("collection not found...");
+      toast.warn(t("collection-not-found"));
       return;
     }
     fetchById(params.id);
@@ -180,14 +196,19 @@ const CollectionDetails: React.FC = () => {
             ))}
           </Tab.List>
           <Tab.Panels className="mt-4">
-            {["Info", "NFTs", "Collaborators", "Reports"].map((tab, idx) => (
+            {[
+              { key: "Info", val: t("info") },
+              { key: "NFTs", val: t("nfts") },
+              { key: "Collaborators", val: t("collaborators") },
+              { key: "Reports", val: t("reports") },
+            ].map((tab, idx) => (
               <Tab.Panel
                 key={idx}
                 className={
                   "rounded-xl focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60 "
                 }
               >
-                {renderTabItem(tab)}
+                {renderTabItem(tab.key)}
               </Tab.Panel>
             ))}
           </Tab.Panels>

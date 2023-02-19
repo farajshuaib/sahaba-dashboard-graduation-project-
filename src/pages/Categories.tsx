@@ -1,5 +1,6 @@
 import { Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate } from "react-router-dom";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
@@ -11,6 +12,7 @@ import Heading from "../shared/Heading/Heading";
 import Pagination from "../shared/Pagination/Pagination";
 
 const Categories: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const { fetch, loading, data, meta, errors } = useCrud("/categories");
   const [page, setPage] = useState<number>(1);
   const navigate = useNavigate();
@@ -33,21 +35,23 @@ const Categories: React.FC = () => {
 
   return (
     <div>
-      <Heading desc="">Categories</Heading>
+      <Heading desc="">{t("categories")}</Heading>
 
       <div className="flex justify-end my-8">
-        <ButtonPrimary href="/category/form">Create New Category</ButtonPrimary>
+        <ButtonPrimary href="/category/form">
+          {t("create-new-category")}
+        </ButtonPrimary>
       </div>
 
       <Table>
         <Table.Head>
           {[
             "id",
-            "name",
-            "number of collection",
-            "number of NFTs",
-            "icon",
-            "action",
+            t("name"),
+            t("number-of-collection"),
+            t("number-of-nfts"),
+            t("icon"),
+            t("action"),
           ].map((key, index) => (
             <Table.HeadCell className="whitespace-nowrap" key={index}>
               {key}
@@ -79,14 +83,14 @@ const Categories: React.FC = () => {
                   target="_blank"
                   className="items-center text-blue-500"
                 >
-                  <span>preview icon</span>
+                  <span>{t("preview-icon")}</span>
                 </a>
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-800 whitespace-nowrap dark:text-white">
                 <ButtonSecondary
                   onClick={() => navigate(`/category/form/${category.id}`)}
                 >
-                  edit
+                  {t("edit")}
                 </ButtonSecondary>
               </Table.Cell>
             </Table.Row>

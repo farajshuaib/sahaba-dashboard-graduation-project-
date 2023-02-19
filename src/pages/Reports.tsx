@@ -5,12 +5,14 @@ import ServerError from "components/ServerError";
 import { Table } from "flowbite-react";
 import { useCrud } from "hooks/useCrud";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Heading from "shared/Heading/Heading";
 import Pagination from "shared/Pagination/Pagination";
 
 const Reports: React.FC = () => {
   const { fetch, loading, data, meta, errors } = useCrud("/reports");
   const [page, setPage] = useState<number>(1);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     fetch({ page });
@@ -30,7 +32,7 @@ const Reports: React.FC = () => {
 
   return (
     <div>
-      <Heading desc="">Reports</Heading>
+      <Heading desc="">{t("reports")}</Heading>
 
       <ReportsTable reports={data} />
       {meta && <Pagination setPage={(page) => setPage(page)} meta={meta} />}

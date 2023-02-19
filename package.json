@@ -8,9 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
-  
   "dependencies": {
-    "@biconomy/mexa": "^3.0.4",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@headlessui/react": "^1.7.3",
     "@reduxjs/toolkit": "^1.8.5",
@@ -28,13 +26,16 @@
     "flowbite-react": "^0.2.0",
     "formik": "^2.2.9",
     "framer-motion": "^7.5.3",
+    "i18next": "^22.4.9",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",
     "react-dom": "^18.2.0",
+    "react-i18next": "^12.1.5",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.2",
+    "@glidejs/glide": "^3.6.0",
     "react-toastify": "^9.0.8",
     "react-use": "^17.4.0",
     "redux-logger": "^3.0.6",

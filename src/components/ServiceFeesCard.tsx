@@ -1,14 +1,16 @@
 import { useWeb3React } from "@web3-react/core";
-import {  utils } from "ethers";
+import { utils } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import useContract from "hooks/useContract";
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
 import Input from "shared/Input/Input";
 
 const ServiceFeesCard: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const { account, library, active } = useWeb3React();
   const [serviceFees, setServiceFees] = React.useState<number>(0);
   const [newServiceFees, setNewServiceFees] = React.useState<number>(0);
@@ -39,7 +41,7 @@ const ServiceFeesCard: React.FC = () => {
     }
 
     if (newServiceFees < 0 || newServiceFees > 100) {
-      toast.error("Please enter a valid service fee percentage");
+      toast.error(t("please-enter-a-valid-service-fee-percentage"));
       return;
     }
 
@@ -56,9 +58,9 @@ const ServiceFeesCard: React.FC = () => {
       await tx.wait();
       await fetchPlatformFees();
       setUpdateServiceFeesLoading(false);
-      toast.success("Service fees updated successfully");
+      toast.success(t("service-fees-updated-successfully"));
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error(t("something-went-wrong-0"));
       setUpdateServiceFeesLoading(false);
       console.log(error);
     }
@@ -75,13 +77,15 @@ const ServiceFeesCard: React.FC = () => {
       </div>
       {!account ? (
         <p className="px-6 py-4 text-sm text-red-500">
-          * You need to be connected to your wallet to interact with the
-          blockchain.
+          *{" "}
+          {t(
+            "you-need-to-be-connected-to-your-wallet-to-interact-with-the-blockchain"
+          )}
         </p>
       ) : (
         <div className="px-6 py-4">
           <p className="">
-            Platform owner will receive fees on each purchase activity
+            {t("platform-owner-will-receive-fees-on-each-purchase-activity")}
           </p>
 
           <div className="flex items-center my-5 gap-3">
@@ -107,7 +111,7 @@ const ServiceFeesCard: React.FC = () => {
                   loading={updateServiceFeesLoading}
                   onClick={updatePlatformFees}
                 >
-                  conform
+                  {t("conform")}
                 </ButtonPrimary>
               </>
             ) : (
@@ -123,7 +127,9 @@ const ServiceFeesCard: React.FC = () => {
               onClick={() => setToggleUpdateServiceFee(!toggleUpdateServiceFee)}
               className=""
             >
-              {toggleUpdateServiceFee ? "Cancel update" : "update service fees"}
+              {toggleUpdateServiceFee
+                ? t("cancel-update")
+                : t("update-service-fees")}
             </ButtonSecondary>
           </div>
         </div>

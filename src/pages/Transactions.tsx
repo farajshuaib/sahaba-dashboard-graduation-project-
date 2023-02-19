@@ -2,6 +2,7 @@ import TransactionsTable from "components/TransactionsTable";
 import { Table } from "flowbite-react";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import EmptyData from "../components/EmptyData";
 import LoadingScreen from "../components/LoadingScreen";
@@ -13,6 +14,8 @@ import Pagination from "../shared/Pagination/Pagination";
 const Transactions: React.FC = () => {
   const { fetch, loading, data, meta, errors } = useCrud("/transactions");
   const [page, setPage] = useState<number>(1);
+  const { t, i18n } = useTranslation();
+
 
   useEffect(() => {
     fetch({ page });
@@ -32,7 +35,7 @@ const Transactions: React.FC = () => {
 
   return (
     <div>
-      <Heading desc="">Transactions</Heading>
+      <Heading desc="">{t('transactions')}</Heading>
 
       <TransactionsTable transactions={data} />
       {meta && <Pagination setPage={(page) => setPage(page)} meta={meta} />}

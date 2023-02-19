@@ -8,16 +8,20 @@ import Input from "shared/Input/Input";
 import { resetPasswordSchema } from "services/validations";
 import { useAppSelector } from "app/hooks";
 import { useApi } from "hooks/useApi";
+import { useTranslation } from "react-i18next";
 
 const ResetPasswordSection: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState<string>("password");
   const userData = useAppSelector((state) => state.account.userData);
   const api = useApi();
+  const { t, i18n } = useTranslation();
 
   return (
     <div className="">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl text-gray800 font-medium">Update Password</h1>
+        <h1 className="text-2xl text-gray800 font-medium">
+          {t("update-password")}
+        </h1>
       </div>
       <Formik
         initialValues={{ password: "", password_confirmation: "" }}
@@ -28,11 +32,11 @@ const ResetPasswordSection: React.FC = () => {
               new_password: values.password,
             });
             setSubmitting(false);
-            toast.success(" password updated successfully");
+            toast.success(t("password-updated-successfully"));
           } catch (error: any) {
             toast.error(
               error?.response?.data?.message ||
-                "something went wrong please try again later"
+                t("something-went-wrong-please-try-again-later")
             );
             setSubmitting(false);
           }
@@ -42,7 +46,7 @@ const ResetPasswordSection: React.FC = () => {
           <Form onSubmit={handleSubmit}>
             <div className="w-full md:w-3/4 grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="my-5">
-                <label htmlFor="password">New Password</label>
+                <label htmlFor="password">{t("new-password")}</label>
                 <div className="flex items-center">
                   <Input
                     type={passwordVisible}
@@ -72,7 +76,9 @@ const ResetPasswordSection: React.FC = () => {
                 />
               </div>
               <div className="my-5">
-                <label htmlFor="password_confirmation">Rewrite Password</label>
+                <label htmlFor="password_confirmation">
+                  {t("rewrite-password")}
+                </label>
                 <Input
                   type="password"
                   placeholder="*********"

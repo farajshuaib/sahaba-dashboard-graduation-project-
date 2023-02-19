@@ -3,6 +3,7 @@ import ServerError from "components/ServerError";
 import { ErrorMessage, Formik } from "formik";
 import { useCrud } from "hooks/useCrud";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Avatar from "shared/Avatar/Avatar";
@@ -21,12 +22,13 @@ const CategoryForm: React.FC = () => {
     icon: "",
   });
   const [categoryIcon, setCategoryIcon] = useState("");
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     if (params.id) {
       setLoading(true);
       fetchById(params.id)
-        .then(({data, icon}: any) => {
+        .then(({ data, icon }: any) => {
           setInitFormState({
             name_en: data.name_en,
             name_ar: data.name_ar,
@@ -51,7 +53,7 @@ const CategoryForm: React.FC = () => {
   return (
     <div>
       <Heading desc="">
-        {params.id ? "update category" : "create category"}
+        {params.id ? t("update-category") : t("create-category")}
       </Heading>
       <div className="p-8 m-5 border border-gray-200 rounded-lg bg-gray-50">
         <Formik
@@ -69,14 +71,14 @@ const CategoryForm: React.FC = () => {
                 payload: form,
                 headers: { "Content-Type": "multipart/form-data" },
               }).then(() => {
-                toast("category updated successfully");
+                toast.success(t("category-updated-successfully"));
                 navigate("/categories");
               });
             } else {
               await create(form, {
                 "Content-Type": "multipart/form-data",
               }).then(() => {
-                toast("category created successfully");
+                toast.success(t("category-created-successfully"));
                 navigate("/categories");
               });
             }
@@ -95,7 +97,7 @@ const CategoryForm: React.FC = () => {
                   htmlFor="name_en"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Name in english
+                  {t("name-in-english")}
                 </label>
                 <Input
                   id="name_en"
@@ -137,7 +139,7 @@ const CategoryForm: React.FC = () => {
                 <Avatar sizeClass="w-16 h-16" imgUrl={categoryIcon} />
                 <div className="">
                   <label className="block text-sm font-medium text-gray-700">
-                    icon
+                    {t("icon")}
                   </label>
                   <Input
                     name="icon"
@@ -158,7 +160,7 @@ const CategoryForm: React.FC = () => {
               </div>
               <div>
                 <ButtonPrimary onClick={handleSubmit} loading={isSubmitting}>
-                  {params.id ? "update category" : "create category"}
+                  {params.id ? t("update-category") : t("create-category")}
                 </ButtonPrimary>
               </div>
             </div>

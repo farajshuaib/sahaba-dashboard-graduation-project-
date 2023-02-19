@@ -1,23 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {
-  useState,
-  useRef,
-  Fragment,
-  useEffect,
-  forwardRef,
-} from "react";
+import React, { useState, useRef, Fragment, forwardRef } from "react";
 
 import logo from "../assets/logo.svg";
-import {
-  Outlet,
-  NavLink,
-  useNavigate,
-  useLocation,
-  useNavigation,
-} from "react-router-dom";
+import { Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useClickAway } from "react-use";
-import { routerLinks } from "../config/navLinks";
 import { Popover, Transition } from "@headlessui/react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { isLoggedIn, logout } from "../app/account/actions";
@@ -26,12 +13,14 @@ import { useWeb3React } from "@web3-react/core";
 import { switchNetwork } from "../utils/functions";
 import { connectors } from "../services/connectors";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { useTranslation } from "react-i18next";
 
 interface nav {
   setToggleSideBar: (val: boolean) => void;
 }
 
 const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
+  const { t } = useTranslation();
   const web3React = useWeb3React();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -45,10 +34,10 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
       await dispatch(logout());
       setLoggingOut(false);
       navigate("/login");
-      toast.success("تم تسجيل الخروج بنجاح");
+      toast.success(t("logged-out-successfully"));
     } catch (error) {
       setLoggingOut(false);
-      toast.error("حدث خطأ ما الرجاء إعادة المحاولة");
+      toast.error(t("something-went-wrong"));
     }
   };
 
@@ -63,10 +52,12 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
       }
       toast.error(
         web3React.error?.message ||
-          "Connecting to wallet has been failed!, you're connecting to unsupported network! please switch to ethereum network"
+          t(
+            "connecting-to-wallet-has-been-failed-youre-connecting-to-unsupported-network-please-switch-to-ethereum-network"
+          )
       );
     } catch (e: any) {
-      toast.error(e || "Connecting to wallet has been failed!");
+      toast.error(e || t("connecting-to-wallet-has-been-failed"));
     }
   };
 
@@ -115,7 +106,7 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
             </div>
           ) : (
             <span className="cursor-pointer" onClick={handleConnectToWallet}>
-              Connect to wallet
+              {t("connect-to-wallet")}
             </span>
           )}
         </div>
@@ -147,7 +138,7 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
                   className="flex items-center justify-start w-full px-2 py-3 border-b border-gray-200 cursor-pointer select-none text-gray800 hover:bg-gray-50"
                 >
                   <i className="mx-2 bx bx-user"></i>
-                  <span>My Account</span>
+                  <span>{t("my-account")}</span>
                 </li>
                 <li
                   onClick={Logout}
@@ -156,7 +147,7 @@ const Nav: React.FC<nav> = ({ setToggleSideBar }) => {
                 >
                   <div className="flex items-center">
                     <i className="mx-2 bx bx-log-in"></i>
-                    <span>logout</span>
+                    <span>{t("logout")}</span>
                   </div>
                   {loggingOut && (
                     <i className="text-2xl bx bx-loader-alt bx-spin "></i>
@@ -179,6 +170,7 @@ interface SideBarProps {
 const SideBar = forwardRef((props: SideBarProps, drawer: any) => {
   const location = useLocation();
   const [toggleMenu, setToggleMenu] = useState<string>("");
+  const { t, i18n } = useTranslation();
 
   const calcElementHeight = (el: navLink[]) => {
     let numberOfElements = el.length;
@@ -186,11 +178,76 @@ const SideBar = forwardRef((props: SideBarProps, drawer: any) => {
     return height;
   };
 
+  const routerLinks: navLink[] = [
+    {
+      name: t("home"),
+      path: "/",
+      icon: <i className="bx bx-home"></i>,
+      isVisible: true,
+    },
+    {
+      name: t("users"),
+      path: "/users",
+      icon: <i className="bx bx-user"></i>,
+      isVisible: true,
+    },
+    {
+      name: t("kyc-applications"),
+      path: "/KYC-applications",
+      icon: <i className="bx bx-id-card"></i>,
+      isVisible: true,
+    },
+    {
+      name: t("categories"),
+      path: "/categories",
+      icon: <i className="bx bx-category"></i>,
+      isVisible: true,
+    },
+    {
+      name: t("collections"),
+      path: "/collections",
+      icon: <i className="bx bx-collection"></i>,
+      isVisible: true,
+    },
+    {
+      name: t("nfts"),
+      path: "/nfts",
+      icon: <i className="bx bx-image-alt"></i>,
+      isVisible: true,
+    },
+    {
+      name: t("transactions"),
+      path: "/transactions",
+      icon: <i className="bx bx-transfer"></i>,
+      isVisible: true,
+    },
+    {
+      name: t("reports"),
+      path: "/reports",
+      icon: <i className="bx bxs-report"></i>,
+      isVisible: true,
+    },
+    {
+      name: t("subscribers"),
+      path: "/subscribers",
+      icon: <i className="bx bxs-captions"></i>,
+      isVisible: true,
+    },
+  ];
+
   return (
     <div
       ref={drawer}
-      className={`hidden-scrollbar bg-white border-r border-gray-200 fixed top-0 h-screen z-30 md:pt-16 w-72 pb-8 transition-all duration-300 overflow-y-scroll  ${
-        props?.toggleSideBar ? "left-0" : "-left-72 md:left-0"
+      className={`hidden-scrollbar bg-white ${
+        i18n.language == "en" ? "border-r" : ""
+      }  border-gray-200 fixed top-0 h-screen z-30 md:pt-16 w-72 pb-8 transition-all duration-300 overflow-y-scroll  ${
+        props?.toggleSideBar
+          ? i18n.language == "en"
+            ? "left-0"
+            : "right-0"
+          : i18n.language == "en"
+          ? "-left-72 md:left-0"
+          : "-right-72 md:right-0"
       }`}
     >
       <div className="flex items-center justify-between p-5 md:hidden ">
@@ -331,6 +388,7 @@ const SideBar = forwardRef((props: SideBarProps, drawer: any) => {
 const Layout: React.FC = () => {
   const [toggleSideBar, setToggleSideBar] = useState<boolean>(false);
   const drawer = useRef(null);
+  const { t, i18n } = useTranslation();
 
   useClickAway(drawer, () => {
     if (toggleSideBar) {
@@ -348,7 +406,11 @@ const Layout: React.FC = () => {
           setToggleSideBar={(val: boolean) => setToggleSideBar(val)}
         />
 
-        <main className="relative w-full h-full mx-auto md:pl-72 md:pt-16">
+        <main
+          className={`relative w-full h-full mx-auto ${
+            i18n.language == "en" ? "md:pl-72 " : "md:pr-72 "
+          } md:pt-16`}
+        >
           <div className="w-full min-h-screen p-5 mb-16 md:p-8">
             <Outlet />
           </div>

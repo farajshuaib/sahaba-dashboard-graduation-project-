@@ -8,6 +8,7 @@ import TransactionsTable from "components/TransactionsTable";
 import { useApi } from "hooks/useApi";
 import { useCrud } from "hooks/useCrud";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Heading from "shared/Heading/Heading";
@@ -15,37 +16,41 @@ import NcImage from "shared/NcImage/NcImage";
 import Pagination from "shared/Pagination/Pagination";
 import { getUserSlug } from "utils/functions";
 
-const _renderTabNftDetails = (nft: Nft) => (
-  <section className="my-8">
-    <div className="grid grid-cols-2 gap-5 my-8 md:grid-cols-2">
-      <Labeled title="token id" value={nft?.token_id} />
-      <Labeled title="title" value={nft?.title} />
-      <Labeled title="is for sale" value={`${nft?.is_for_sale}`} />
-      <Labeled title="price" value={`${nft?.price}`} />
-      <Labeled title="sale end at" value={`${nft?.sale_end_at}`} />
-      <Labeled
-        title="collection"
-        previewTitle={nft?.collection.name}
-        preview
-        value={`/collection/${nft?.collection.id}`}
-      />
-      <Labeled
-        title="creator"
-        previewTitle={getUserSlug(nft?.creator)}
-        preview
-        value={`/user/${nft?.creator.id}`}
-      />
-      <Labeled
-        title="owner"
-        previewTitle={getUserSlug(nft?.owner)}
-        preview
-        value={`/user/${nft?.owner.id}`}
-      />
-      <Labeled title="likes" value={`${nft?.like_count}`} />
-      <Labeled title="watches" value={`${nft?.watch_time}`} />
-    </div>
-  </section>
-);
+const RenderTabNftDetails = (nft: Nft) => {
+  const { t, i18n } = useTranslation();
+
+  return (
+    <section className="my-8">
+      <div className="grid grid-cols-2 gap-5 my-8 md:grid-cols-2">
+        <Labeled title={t("token-id")} value={nft?.token_id} />
+        <Labeled title={t("title")} value={nft?.title} />
+        <Labeled title={t("is-for-sale")} value={`${nft?.is_for_sale}`} />
+        <Labeled title={t("price")} value={`${nft?.price}`} />
+        <Labeled title={t("sale-end-at")} value={`${nft?.sale_end_at}`} />
+        <Labeled
+          title={t("collection")}
+          previewTitle={nft?.collection?.name}
+          preview
+          value={`/collection/${nft?.collection?.id}`}
+        />
+        <Labeled
+          title={t("creator")}
+          previewTitle={getUserSlug(nft?.creator)}
+          preview
+          value={`/user/${nft?.creator?.id}`}
+        />
+        <Labeled
+          title={t("owner")}
+          previewTitle={getUserSlug(nft?.owner)}
+          preview
+          value={`/user/${nft?.owner?.id}`}
+        />
+        <Labeled title={t("likes")} value={`${nft?.like_count}`} />
+        <Labeled title={t("watches")} value={`${nft?.watch_time}`} />
+      </div>
+    </section>
+  );
+};
 
 const RenderTabNftTransactions = (nft: Nft) => {
   const { fetch, loading, data, meta, errors } = useCrud(`/transactions`);
@@ -105,6 +110,7 @@ const RenderNftsReports: React.FC = () => {
 
 const NftDetails: React.FC = () => {
   const params = useParams();
+  const { t, i18n } = useTranslation();
   const { fetchById, loading, item, errors } = useCrud(`/nfts`);
   const [changingStatusLoading, setChangingStatusLoading] = useState(false);
   const navigate = useNavigate();
@@ -112,14 +118,6 @@ const NftDetails: React.FC = () => {
 
   const Tabs = ["Info", "Transactions", "Reports"];
 
-  useEffect(() => {
-    if (!params.id) {
-      navigate("/nfts");
-      toast.warn("nft not found...");
-      return;
-    }
-    fetchById(params.id);
-  }, []);
 
   const toggleNFTStatus = async () => {
     if (!item) return;
@@ -131,9 +129,40 @@ const NftDetails: React.FC = () => {
       setChangingStatusLoading(false);
     } catch (error: any) {
       setChangingStatusLoading(false);
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message || t("something-went-wrong"));
     }
   };
+
+  const renderTabItem = (tab: string) => {
+    if (!item) return <></>;
+    switch (tab) {
+      case "Info":
+        return <RenderTabNftDetails {...item} />;
+      case "Transactions":
+        return <RenderTabNftTransactions {...item} />;
+      case "Reports":
+        return <RenderNftsReports />;
+      default:
+        return <></>;
+    }
+  };
+
+  const _renderNFTImage = (nft: Nft) => (
+    <div className="p-5 bg-white rounded-lg">
+      <NcImage src={nft?.file_path} />
+    </div>
+  );
+
+
+
+  useEffect(() => {
+    if (!params.id) {
+      navigate("/nfts");
+      toast.warn(t("nft-not-found"));
+      return;
+    }
+    fetchById(params.id);
+  }, []);
 
   if (loading) {
     return <LoadingScreen />;
@@ -147,30 +176,10 @@ const NftDetails: React.FC = () => {
     return <EmptyData />;
   }
 
-  const renderTabItem = (tab: string) => {
-    if (!item) return <></>;
-    switch (tab) {
-      case "Info":
-        return _renderTabNftDetails(item);
-      case "Transactions":
-        return <RenderTabNftTransactions {...item} />;
-      case "Reports":
-        return <RenderNftsReports />;
-      default:
-        return <></>;
-    }
-  };
-
-  const _renderNFTImage = (nft: Nft) => (
-    <div className="p-5 bg-white rounded-lg">
-      <NcImage src={nft.file_path} />
-    </div>
-  );
-
   return (
     <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
       <section className="col-span-8 p-4 bg-white rounded-lg shadow-sm">
-        <Heading desc="">NFT Details</Heading>
+        <Heading desc="">{t("nft-details")}</Heading>
         <div className="flex justify-end my-5">
           <button
             onClick={toggleNFTStatus}
@@ -182,7 +191,7 @@ const NftDetails: React.FC = () => {
               <i className="bx bx-loader"></i>
             ) : (
               <span>
-                {item.status == "published" ? "hide NFT" : "publish NFT"}
+                {item.status == "published" ? t("hide-nft") : t("publish-nft")}
               </span>
             )}
           </button>

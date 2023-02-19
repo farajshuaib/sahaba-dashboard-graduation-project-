@@ -1,9 +1,5 @@
 import NftsTable from "components/NftsTable";
-import { Table } from "flowbite-react";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import ButtonSecondary from "shared/Button/ButtonSecondary";
 import EmptyData from "../components/EmptyData";
 import LoadingScreen from "../components/LoadingScreen";
 import ServerError from "../components/ServerError";
@@ -14,7 +10,6 @@ import Pagination from "../shared/Pagination/Pagination";
 const Nfts: React.FC = () => {
   const { fetch, loading, data, meta, errors } = useCrud("/nfts");
   const [page, setPage] = useState<number>(1);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch({ page });

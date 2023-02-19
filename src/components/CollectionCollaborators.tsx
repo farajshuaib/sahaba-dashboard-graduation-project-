@@ -1,6 +1,7 @@
 import { Table } from "flowbite-react";
 import moment from "moment";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
 import { getUserSlug } from "utils/functions";
@@ -12,25 +13,25 @@ interface Props {
 
 const CollectionCollaborators: React.FC<Props> = ({ collaborators }) => {
   const navigate = useNavigate();
-  console.log(collaborators);
+  const { t } = useTranslation();
   return (
     <div>
       <Table>
         <Table.Head>
           {[
             "id",
-            "user id",
-            "first name",
-            "last name",
-            "username",
-            "email",
-            "wallet address",
-            "is verified",
-            "created nfts count",
-            "owned nfts count",
-            "is subscribed",
-            "created at",
-            "actions",
+            t('user-id'),
+            t("first-name"),
+            t('last-name'),
+            t('username'),
+            t('email'),
+            t('wallet-address'),
+            t('is-verified'),
+            t('created-nfts-count'),
+            t('owned-nfts-count'),
+            t('is-subscribed'),
+            t('created-at'),
+            t('actions'),
           ].map((item, index) => (
             <Table.HeadCell key={index} className="whitespace-nowrap">
               {item}

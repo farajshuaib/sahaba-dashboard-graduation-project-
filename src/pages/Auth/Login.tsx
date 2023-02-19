@@ -5,13 +5,15 @@ import { loginSchema } from "../../services/validations";
 import { useNavigate } from "react-router-dom";
 import banner from "../../assets/SAHABA.png";
 import { useAppDispatch } from "../../app/hooks";
-import {  login } from "../../app/account/actions";
+import { login } from "../../app/account/actions";
 import ButtonPrimary from "../../shared/Button/ButtonPrimary";
 import Input from "../../shared/Input/Input";
 import { Alert } from "../../shared/Alert/Alert";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { useTranslation } from "react-i18next";
 
 const Login: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState<string>("");
@@ -35,7 +37,7 @@ const Login: React.FC = () => {
             console.log(error);
             setError(
               error?.data?.message ||
-                "something went wrong please try again later"
+                t("something-went-wrong-please-try-again-later")
             );
             setSubmitting(false);
           }
@@ -56,7 +58,7 @@ const Login: React.FC = () => {
               <Form>
                 <div className="my-5 w-full">
                   <label htmlFor="email" className="input-lable">
-                    Email
+                    {t('email')}
                   </label>
                   <Input
                     required
@@ -79,7 +81,7 @@ const Login: React.FC = () => {
                 </div>
                 <div className="my-5">
                   <label htmlFor="password" className="input-lable">
-                    Password
+                    {t('password')}
                   </label>
                   <Input
                     required
@@ -108,17 +110,17 @@ const Login: React.FC = () => {
                   onClick={() => handleSubmit()}
                   className="block w-full"
                 >
-                  Submit
+                  {t('submit-0')}
                 </ButtonPrimary>
               </Form>
               <div className="mt-8 flex items-center text-center justify-center text-gray700 text-sm">
-                <p>forgot your password ?</p>
+                <p>{t('forgot-your-password')}</p>
                 <button
                   type="button"
                   className="font-bold mx-1 underline"
-                  onClick={() => navigate("/forget-password")}
+                  onClick={() => navigate("/forgot-password")}
                 >
-                  click here
+                 {t('click-here')}
                 </button>
               </div>
             </div>

@@ -1,5 +1,6 @@
 import { Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate } from "react-router-dom";
 import Badge from "shared/Badge/Badge";
 import ButtonSecondary from "shared/Button/ButtonSecondary";
@@ -15,6 +16,7 @@ const Users: React.FC = () => {
   const { fetch, loading, data, meta, errors } = useCrud("/users");
   const [page, setPage] = useState<number>(1);
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     fetch({ page });
@@ -34,22 +36,22 @@ const Users: React.FC = () => {
 
   return (
     <div>
-      <Heading desc="">Users</Heading>
+      <Heading desc="">{t("users")}</Heading>
 
       <Table>
         <Table.Head>
           {[
             "id",
-            "first name",
-            "last name",
-            "username",
-            "email",
-            "wallet address",
-            "created nfts count",
-            "owned nfts count",
-            "is subscribed",
-            "status",
-            "actions",
+            t("first-name"),
+            t("last-name"),
+            t("username"),
+            t("email"),
+            t("wallet-address"),
+            t("created-nfts-count"),
+            t("owned-nfts-count"),
+            t("is-subscribed"),
+            t("status"),
+            t("actions"),
           ].map((item, index) => (
             <Table.HeadCell key={index} className="whitespace-nowrap">
               {item}
@@ -71,7 +73,7 @@ const Users: React.FC = () => {
                 user.wallet_address,
                 user.created_nfts_count,
                 user.owned_nfts_count,
-                user.is_subscribed ? "yes" : "no",
+                user.is_subscribed ? t("yes") : t("no"),
               ].map((item, index) => (
                 <Table.Cell
                   key={index}
