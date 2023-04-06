@@ -130,6 +130,7 @@ interface Nft {
   sale_end_at: Date;
   created_at: Date;
   status: "published" | "hidden";
+  file_type: string
 }
 
 interface Collection {

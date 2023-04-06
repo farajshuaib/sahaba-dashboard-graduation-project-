@@ -12,3 +12,21 @@ body {
 .link {
   @apply flex items-center gap-1 text-blue-500 hover:underline;
 }
+
+
+.poem-box {
+  font-family: 'Montserrat', sans-serif !important;
+  text-rendering: optimizeLegibility;
+  text-size-adjust: none;
+  position: relative;
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  min-height: fit-content;
+  overflow-y: scroll;
+  padding-top: 12%;
+  padding-bottom: 12%;
+  color: #211042;
+  background: #fff3e7;
+  box-shadow: inset 7px 0 73px 22px #e6d1bb;
+}

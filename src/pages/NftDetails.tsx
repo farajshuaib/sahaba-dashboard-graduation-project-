@@ -22,7 +22,7 @@ const RenderTabNftDetails = (nft: Nft) => {
   return (
     <section className="my-8">
       <div className="grid grid-cols-2 gap-5 my-8 md:grid-cols-2">
-        <Labeled title={t("token-id")} value={nft?.token_id} />
+        <Labeled title={t("token-id")} value={nft?.id.toString()} />
         <Labeled title={t("title")} value={nft?.title} />
         <Labeled title={t("is-for-sale")} value={`${nft?.is_for_sale}`} />
         <Labeled title={t("price")} value={`${nft?.price}`} />
@@ -118,7 +118,6 @@ const NftDetails: React.FC = () => {
 
   const Tabs = ["Info", "Transactions", "Reports"];
 
-
   const toggleNFTStatus = async () => {
     if (!item) return;
     try {
@@ -149,11 +148,9 @@ const NftDetails: React.FC = () => {
 
   const _renderNFTImage = (nft: Nft) => (
     <div className="p-5 bg-white rounded-lg">
-      <NcImage src={nft?.file_path} />
+      <NcImage contentType={nft.file_type} src={nft?.file_path} />
     </div>
   );
-
-
 
   useEffect(() => {
     if (!params.id) {
