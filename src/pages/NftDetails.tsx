@@ -80,12 +80,12 @@ const RenderTabNftTransactions = (nft: Nft) => {
   );
 };
 
-const RenderNftsReports: React.FC = () => {
+const RenderNftsReports = (nft: Nft) => {
   const { data, loading, fetch, errors, meta } = useCrud(`/reports`);
   const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
-    fetch({ page, reportable: "NFT" });
+    fetch({ page, reportable: "NFT", reportable_id: nft?.id });
   }, [page]);
 
   if (loading) {
@@ -140,7 +140,7 @@ const NftDetails: React.FC = () => {
       case "Transactions":
         return <RenderTabNftTransactions {...item} />;
       case "Reports":
-        return <RenderNftsReports />;
+        return <RenderNftsReports {...item} />;
       default:
         return <></>;
     }
