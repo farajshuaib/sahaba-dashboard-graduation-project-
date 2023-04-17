@@ -180,5 +180,6 @@
   "user-name": "اسم المستخدم",
   "user-not-found": "لم يتم العثور على المستخدم...",
   "verified": "تم التحقق",
-  "website-page": "صفحة الموقع"
+  "website-page": "صفحة الموقع",
+  "total-sold-amount": "إجمالي المبلغ المباع"
 }

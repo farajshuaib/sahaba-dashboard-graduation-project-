@@ -118,12 +118,12 @@ const Home: React.FC = () => {
             </div>
           </div>
           <p className="mt-4 mb-2 font-semibold uppercase">
-            {t("sold-amount-in-each-token")}
+            {t('total-sold-amount')}
           </p>
           <div className="flex flex-wrap gap-4">
             <div>
               <p>
-                {transactionData.count?.total_sold_amount}
+                {`${transactionData.count?.total_sold_amount.toFixed(4)}`}
                 <span className="text-xs text-gray-100"> ETH</span>
               </p>
             </div>

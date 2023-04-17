@@ -169,5 +169,6 @@
   "created-nfts": "Created NFTs",
   "owned-nfts": "Owned NFTs",
   "suspend-account": "Suspend account",
-  "activate-account": "Activate account"
+  "activate-account": "Activate account",
+  "total-sold-amount": "Total Sold Amount"
 }
