@@ -69,7 +69,6 @@ const Home: React.FC = () => {
   const [categoriesNftsData, setCategoriesNftsData] = React.useState<any>();
   const { t, i18n } = useTranslation();
 
-
   const fetchData = async () => {
     try {
       const { data: transaction } = await api.get("/statistics/transactions");
@@ -107,7 +106,9 @@ const Home: React.FC = () => {
           <div className="flex flex-wrap items-center gap-4 py-4">
             <img src={logo_light} alt="" className="w-24 h-24 object-cover" />
             <div className="flex flex-col gap-2">
-              <span className="font-semibold uppercase">{t('total-sold-tokens')}</span>
+              <span className="font-semibold uppercase">
+                {t("total-sold-tokens")}
+              </span>
               <div className="flex items-end gap-2">
                 <span className="text-2xl">
                   {transactionData.count?.total_sold_tokens}
@@ -117,7 +118,7 @@ const Home: React.FC = () => {
             </div>
           </div>
           <p className="mt-4 mb-2 font-semibold uppercase">
-            {t('sold-amount-in-each-token')}
+            {t("sold-amount-in-each-token")}
           </p>
           <div className="flex flex-wrap gap-4">
             <div>
@@ -136,44 +137,46 @@ const Home: React.FC = () => {
         <div className="px-6 py-4 bg-white border-b border-gray-200">
           <div className="text-xl font-semibold">
             <div className="flex items-center justify-between">
-              <p className="text-xl font-semibold">{t('transactions')}</p>
-              <p className="text-sm text-gray-500">{t('last-30-days')}</p>
+              <p className="text-xl font-semibold">{t("transactions")}</p>
+              <p className="text-sm text-gray-500">{t("last-30-days")}</p>
             </div>
           </div>
         </div>
         <div className="px-6 py-4">
           {/* chart */}
-          <Line
-            options={{
-              responsive: true,
-              plugins: {
-                legend: {
-                  position: "top" as const,
+          {transactionData.statistics && (
+            <Line
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    position: "top" as const,
+                  },
+                  title: {
+                    display: true,
+                    text: t("transactions-events") as string,
+                  },
                 },
-                title: {
-                  display: true,
-                  text: t('transactions-events') as string,
-                },
-              },
-            }}
-            data={{
-              labels: transactionData.statistics?.labels,
-              datasets: [
-                {
-                  label: "mint",
-                  data: transactionData.statistics?.mint,
-                  borderColor: "rgb(4, 108, 78)",
-                  backgroundColor: "rgba(4, 108, 78, 0.5)",
-                },
-                {
-                  label: "sale",
-                  data: transactionData.statistics?.sale,
-                  borderColor: "rgb(53, 162, 235)",
-                  backgroundColor: "rgba(53, 162, 235, 0.5)",
-                },
-              ],
-            }}
-          />
+              }}
+              data={{
+                labels: Object.values(transactionData.statistics?.labels),
+                datasets: [
+                  {
+                    label: "mint",
+                    data: transactionData.statistics?.mint,
+                    borderColor: "rgb(4, 108, 78)",
+                    backgroundColor: "rgba(4, 108, 78, 0.5)",
+                  },
+                  {
+                    label: "sale",
+                    data: transactionData.statistics?.sale,
+                    borderColor: "rgb(53, 162, 235)",
+                    backgroundColor: "rgba(53, 162, 235, 0.5)",
+                  },
+                ],
+              }}
+            />
+          )}
         </div>
       </section>
 
@@ -181,7 +184,9 @@ const Home: React.FC = () => {
         <div className="px-6 py-4 bg-white border-b border-gray-200">
           <div className="text-xl font-semibold">
             <div className="flex items-center justify-between">
-              <p className="text-xl font-semibold">{t('nfts-in-each-category')}</p>
+              <p className="text-xl font-semibold">
+                {t("nfts-in-each-category")}
+              </p>
             </div>
           </div>
         </div>
@@ -220,27 +225,27 @@ const Home: React.FC = () => {
       <section className="flex flex-col col-span-12 gap-4 lg:col-span-4">
         {[
           {
-            title: t('total-kyc-applications'),
+            title: t("total-kyc-applications"),
             value: kycData.count?.total,
             color: " bg-gray-500/20 text-gray-700",
           },
           {
-            title: t('on-review-kyc-applications'),
+            title: t("on-review-kyc-applications"),
             value: kycData.count?.on_review,
             color: " bg-blue-500/20 text-blue-700",
           },
           {
-            title: t('approved-kyc-applications'),
+            title: t("approved-kyc-applications"),
             value: kycData.count?.approved,
             color: " bg-green-500/20 text-green-700",
           },
           {
-            title: t('pending-kyc-applications'),
+            title: t("pending-kyc-applications"),
             value: kycData.count?.pending,
             color: "bg-yellow-500/20 text-yellow-700",
           },
           {
-            title: t('rejected-kyc-applications'),
+            title: t("rejected-kyc-applications"),
             value: kycData.count?.rejected,
             color: "bg-red-500/20 text-red-700",
           },
@@ -274,8 +279,8 @@ const Home: React.FC = () => {
         <div className="px-6 py-4 bg-white border-b border-gray-200">
           <div className="text-xl font-semibold">
             <div className="flex items-center justify-between">
-              <p className="text-xl font-semibold">{t('kyc-applications')}</p>
-              <p className="text-sm text-gray-500">{t('last-30-days')}</p>
+              <p className="text-xl font-semibold">{t("kyc-applications")}</p>
+              <p className="text-sm text-gray-500">{t("last-30-days")}</p>
             </div>
           </div>
         </div>
@@ -290,7 +295,7 @@ const Home: React.FC = () => {
                 },
                 title: {
                   display: true,
-                  text: t('kyc-applications') as string,
+                  text: t("kyc-applications") as string,
                 },
               },
             }}
