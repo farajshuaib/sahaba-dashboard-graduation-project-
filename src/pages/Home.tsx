@@ -123,9 +123,7 @@ const Home: React.FC = () => {
           <div className="flex flex-wrap gap-4">
             <div>
               <p>
-                {`${parseFloat(
-                  transactionData.count?.total_sold_amount
-                ).toFixed(4)}`}
+                {transactionData.count?.total_sold_amount}
                 <span className="text-xs text-gray-100"> ETH</span>
               </p>
             </div>
