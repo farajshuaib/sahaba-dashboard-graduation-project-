@@ -19,7 +19,6 @@ const NftsTable: React.FC<Props> = ({ nfts }) => {
       <Table>
         <Table.Head>
           {[
-            "id",
             t('token-id'),
             t('title'),
             t('price'),
@@ -46,7 +45,6 @@ const NftsTable: React.FC<Props> = ({ nfts }) => {
             >
               {[
                 nft?.id,
-                nft?.token_id,
                 nft?.title,
                 nft?.price,
                 nft?.is_for_sale,

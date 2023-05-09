@@ -30,16 +30,11 @@ export function deleteToken() {
   delete api.defaults.headers.common.Authorization;
 }
 
-function setChaidId() {
-  api.defaults.params.chainId = window?.ethereum ? window?.ethereum?.networkVersion || 5 : 5;
-}
 
 export function useApi() {
   if (!api) {
     createApi();
   }
-
-  setChaidId();
 
   return api;
 }
